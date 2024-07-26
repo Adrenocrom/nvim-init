@@ -196,7 +196,7 @@ require("lazy").setup({
 										runtimes = {
 											{
 												name = "current",
-												path = "/home/josef/.sdkman/candidates/java/current",
+												path = "~/.sdkman/candidates/java/current",
 												default = true
 											}
 										}

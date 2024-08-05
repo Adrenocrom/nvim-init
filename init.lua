@@ -346,12 +346,12 @@ require("lazy").setup({
 					},
 				}
 
-				vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#993939' })
+				vim.api.nvim_set_hl(0, 'DapBreakpoint', { fg = '#ff0000' })
 				vim.api.nvim_set_hl(0, 'DapLogPoint', { fg = '#61afef' })
-				vim.api.nvim_set_hl(0, 'DapStopped', { ctermbg = 0, fg = '#98c379', bg = '#31353f' })
+				vim.api.nvim_set_hl(0, 'DapStopped', { ctermbg = 0, fg = '#00ff00', bg = '#31353f' })
 
 				vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
-				vim.fn.sign_define('DapBreakpoint', { text = '⬤', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
+				vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint', linehl = '', numhl = 'DapBreakpoint' })
 				vim.fn.sign_define('DapBreakpointRejected', { text='', texthl='DapBreakpoint', linehl='', numhl= 'DapBreakpoint' })
 				vim.fn.sign_define('DapLogPoint', { text='', texthl='DapLogPoint', linehl='', numhl= 'DapLogPoint' })
 				vim.fn.sign_define('DapStopped', { text='', texthl='DapStopped', linehl='DapStopped', numhl= 'DapStopped' })

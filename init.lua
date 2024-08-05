@@ -127,7 +127,7 @@ require("lazy").setup({
 					topdelete = { text = '‾' },
 					changedelete = { text = '~' },
 				},
-			},
+			}
 		},
 		{ -- LSP Configuration & Plugins
 			'neovim/nvim-lspconfig',
@@ -186,7 +186,7 @@ require("lazy").setup({
 
 				require('mason').setup({
 					ui = {
-						border = "single" 
+						border = "single"
 					}
 				})
 				local ensure_installed = vim.tbl_keys(servers or { })

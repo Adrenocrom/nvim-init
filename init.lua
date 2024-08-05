@@ -24,7 +24,7 @@ vim.o.shiftwidth = 4
 vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
-vim.keymap.set('i', '<C-l>', 'LOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
+vim.keymap.set('i', '<leader>l', 'LOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
 
 local function insertFullPath()
   local filepath = vim.fn.expand('%')
@@ -146,10 +146,20 @@ require("lazy").setup({
 				-- Useful status updates for LSP.
 				-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 				{ 'j-hui/fidget.nvim', opts = {} },
-
+				{
+					"folke/lazydev.nvim",
+					ft = "lua", -- only load on lua files
+					opts = {
+						library = {
+						-- See the configuration section for more details
+						-- Load luvit types when the `vim.uv` word is found
+							{ path = "luvit-meta/library", words = { "vim%.uv" } },
+						}
+					}
+				}
 				-- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
 				-- used for completion, annotations and signatures of Neovim apis
-				{ 'folke/neodev.nvim', opts = {} },
+				-- { 'folke/neodev.nvim', opts = {} },
 			},
 			config = function()
 				vim.api.nvim_create_autocmd('LspAttach', {

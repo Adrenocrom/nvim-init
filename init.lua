@@ -119,15 +119,20 @@ require("lazy").setup({
 		},
 		{ -- Adds git related signs to the gutter, as well as utilities for managing changes
 			'lewis6991/gitsigns.nvim',
-			opts = {
-				signs = {
-					add = { text = '+' },
-					change = { text = '~' },
-					delete = { text = '_' },
-					topdelete = { text = '‾' },
-					changedelete = { text = '~' },
-				},
-			}
+			config = function ()
+				vim.cmd.hi "GitSignsAdd guifg='#00ff00'"
+				vim.cmd.hi "GitSignsDelete guifg='#ff0000'"
+				require("gitsigns").setup({
+					signs = {
+						add = { text = '+' },
+						change = { text = '~' },
+						delete = { text = '_' },
+						topdelete = { text = '‾' },
+						changedelete = { text = '~' },
+					}
+				})
+
+			end
 		},
 		{ -- LSP Configuration & Plugins
 			'neovim/nvim-lspconfig',

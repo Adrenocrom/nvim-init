@@ -377,17 +377,17 @@ require("lazy").setup({
 					},
 					layouts = { {
 							elements = { {
-									id = "scopes",
-									size = 0.25
+									id = "stacks",
+									size = 0.2
 								}, {
 									id = "breakpoints",
-									size = 0.25
+									size = 0.1
 								}, {
-									id = "stacks",
-									size = 0.25
+									id = "scopes",
+									size = 0.6
 								}, {
 									id = "watches",
-									size = 0.25
+									size = 0.1
 								} },
 							position = "right",
 							size = 40

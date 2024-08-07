@@ -11,10 +11,27 @@ install
 
     git clone https://github.com/Adrenocrom/nvim-init.git ~/.config/nvim/
 
-maven config
+maven.config
 ------------
 
     // cd <workspace>
     // mkdir .mvn  && cd.mvn && touch maven.config
     // inside maven config put settings you would append to mvn
     // like: -s ~/.m2/settings.xml
+
+launch.json
+-----------
+
+    // cd <project>
+    // mkdir .vscode && cd .vscode && touch launch.json
+    {
+        "configurations": [{
+            "type": "java",
+            "name": "Attach",
+            "request": "attach",
+            "hostName": "<hostname>",
+            "port": "<port>",
+            "mainClass": "<mainclass>",
+            "projectName": "<artefactId>"
+        }]
+    }

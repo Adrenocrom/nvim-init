@@ -17,3 +17,4 @@ maven config
     // cd <workspace>
     // mkdir .mvn  && cd.mvn && touch maven.config
     // inside maven config put settings you would append to mvn
+    // like: -s ~/.m2/settings.xml

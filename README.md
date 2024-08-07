@@ -25,10 +25,11 @@ launch.json
 This config file is only needed for remote debugging, attach to processes
 should be working fine too.
 If you want to just start your application,
-additianal params could set inside nvim.
-with:
+additianal params could set inside nvim with
 
     :JavaProfile
+
+Otherwise for remotedebugging
 
     // cd <project>
     // mkdir .vscode && cd .vscode && touch launch.json

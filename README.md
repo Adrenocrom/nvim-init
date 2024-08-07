@@ -10,3 +10,10 @@ install
 -------
 
     git clone https://github.com/Adrenocrom/nvim-init.git ~/.config/nvim/
+
+maven config
+------------
+
+    // cd <workspace>
+    // mkdir .mvn  && cd.mvn && touch maven.config
+    // inside maven config put settings you would append to mvn

@@ -14,6 +14,14 @@ install
 java
 ----
 
+### required
+
+* sdkman (https://sdkman.io/)
+
+* jdtls install via mason
+
+    :Mason
+
 ### maven.config
 
     // cd <workspace>

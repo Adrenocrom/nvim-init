@@ -11,14 +11,20 @@ install
 
     git clone https://github.com/Adrenocrom/nvim-init.git ~/.config/nvim/
 
+### required
+
+* __ripgrep__ is needed for live_grep of telescope
+
+* __ctags__ is needed for ctags open with <F8>
+
 java
 ----
 
 ### required
 
-* sdkman (https://sdkman.io/)
+* __sdkman__ (https://sdkman.io/) used for java/maven/gradle version selection
 
-* jdtls install via mason
+* __jdtls__ install via mason
 
         :Mason
 

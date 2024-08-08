@@ -32,6 +32,9 @@ The debugger can be opened with F7 key
 
 ### maven.config
 
+This config is only needed if you need to setup special maven configs.
+Like a diferent settings.xml
+
     // cd <workspace>
     // mkdir .mvn  && cd.mvn && touch maven.config
     // inside maven config put settings you would append to mvn

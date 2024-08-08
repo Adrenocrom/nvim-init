@@ -15,10 +15,12 @@ install
 
 * __ripgrep__ is needed for live_grep of telescope
 
-* __ctags__ is needed for ctags open with <F8>
+* __ctags__ is needed for ctags open with F8 key
 
 java
 ----
+
+The debugger can be opened with F7 key
 
 ### required
 

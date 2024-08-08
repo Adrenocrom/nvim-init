@@ -11,16 +11,17 @@ install
 
     git clone https://github.com/Adrenocrom/nvim-init.git ~/.config/nvim/
 
-maven.config
-------------
+java
+----
+
+### maven.config
 
     // cd <workspace>
     // mkdir .mvn  && cd.mvn && touch maven.config
     // inside maven config put settings you would append to mvn
     // like: -s ~/.m2/settings.xml
 
-launch.json
------------
+### launch.json
 
 This config file is only needed for remote debugging, attach to processes
 should be working fine too.

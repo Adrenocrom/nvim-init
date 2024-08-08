@@ -20,7 +20,7 @@ java
 
 * jdtls install via mason
 
-    :Mason
+        :Mason
 
 ### maven.config
 

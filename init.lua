@@ -24,7 +24,7 @@ vim.o.shiftwidth = 4
 vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
-vim.keymap.set('n', '<leader>l', 'iLOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
+vim.keymap.set('n', '<leader>l', 'aLOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
 
 local function insertFullPath()
   local filepath = vim.fn.expand('%')

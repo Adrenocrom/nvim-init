@@ -70,7 +70,7 @@ require("lazy").setup({
 		}, {
 			"tpope/vim-fugitive",
 			config = function()
-				vim.api.nvim_set_keymap("n", "<leader>b", ":Git blame<CR>", {})
+				vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", {})
 			end
 		},
 		"tpope/vim-dadbod",

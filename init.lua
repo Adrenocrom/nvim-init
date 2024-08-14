@@ -31,7 +31,7 @@ local function insertFullPath()
   vim.fn.setreg('+', filepath) -- write to clippoard
 end
 
-vim.keymap.set('n', '<C-p>', insertFullPath, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>p>', insertFullPath, { noremap = true, silent = true })
 
 vim.cmd([[
 	vnoremap < <gv
@@ -58,8 +58,8 @@ require("lazy").setup({
 			dependencies = { "nvim-lua/plenary.nvim" },
 			config = function()
 				local builtin = require('telescope.builtin')
-				vim.keymap.set('n', '<C-f>', builtin.find_files, {})
-				vim.keymap.set('n', '<C-g>', builtin.live_grep, {})
+				vim.keymap.set('n', '<leader>f', builtin.find_files, {})
+				vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
 			end
 		}, {
 			'nvim-telescope/telescope-fzf-native.nvim',
@@ -70,7 +70,7 @@ require("lazy").setup({
 		}, {
 			"tpope/vim-fugitive",
 			config = function()
-				vim.api.nvim_set_keymap("n", "<C-b>", ":Git blame<CR>", {})
+				vim.api.nvim_set_keymap("n", "<leader>b", ":Git blame<CR>", {})
 			end
 		},
 		"tpope/vim-dadbod",

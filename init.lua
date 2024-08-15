@@ -183,7 +183,7 @@ require("lazy").setup({
 						map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 						map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 						map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-						map('K', vim.lsp.buf.hover, 'Hover Documentation')
+						map('<leader>i', vim.lsp.buf.hover, 'Hover Documentation')
 						map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
 					end
@@ -191,6 +191,27 @@ require("lazy").setup({
 
 				local capabilities = vim.lsp.protocol.make_client_capabilities()
 				capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
+				-- cauldron lsp 
+				local lspconfig = require 'lspconfig'
+				local configs = require 'lspconfig.configs'
+				if not configs.cauldron_ls then
+					configs.cauldron_ls = {
+						default_config = {
+							cmd = {
+								'java',
+								'-jar',
+								'/home/josef/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
+							},
+							root_dir = lspconfig.util.root_pattern('pom.xml'),
+							filetypes = { 'xml' },
+						},
+				  	}
+				end
+				lspconfig.cauldron_ls.setup {
+					capabilities = capabilities
+				}
+				-- cauldron lsp 
 
 				local servers = {
 					lua_ls = {
@@ -201,7 +222,7 @@ require("lazy").setup({
 								},
 							},
 						},
-					},
+					}
 				}
 
 				require('mason').setup({
@@ -237,7 +258,7 @@ require("lazy").setup({
 									}
 								}
 							})
-						end,
+						end
 					},
 				}
 			end

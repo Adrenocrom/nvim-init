@@ -15,6 +15,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.o.number = true
+vim.o.relativenumber = true;
 vim.o.mouse = 'a'
 vim.o.incsearch = true
 vim.o.hlsearch = true
@@ -25,6 +26,14 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
 vim.keymap.set('n', '<leader>l', 'aLOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
+
+
+--learn vim motions
+vim.api.nvim_set_keymap('', '<Up>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Down>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Left>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Right>', '<Nop>', { noremap = true, silent = true })
+
 
 local function insertFullPath()
   local filepath = vim.fn.expand('%')
@@ -191,27 +200,6 @@ require("lazy").setup({
 
 				local capabilities = vim.lsp.protocol.make_client_capabilities()
 				capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
-				-- cauldron lsp 
-				local lspconfig = require 'lspconfig'
-				local configs = require 'lspconfig.configs'
-				if not configs.cauldron_ls then
-					configs.cauldron_ls = {
-						default_config = {
-							cmd = {
-								'java',
-								'-jar',
-								'~/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
-							},
-							root_dir = lspconfig.util.root_pattern('pom.xml'),
-							filetypes = { 'xml' },
-						},
-				  	}
-				end
-				lspconfig.cauldron_ls.setup {
-					capabilities = capabilities
-				}
-				-- cauldron lsp 
 
 				local servers = {
 					lua_ls = {

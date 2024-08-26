@@ -262,7 +262,7 @@ require("lazy").setup({
 								'~/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
 							},
 							root_dir = lspconfig.util.root_pattern("*.cld", "pom.xml"),
-							filetypes = { 'cauldron' },
+							filetypes = { 'xml.cauldron' },
 						},
 				  	}
 				end

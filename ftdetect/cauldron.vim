@@ -1,1 +1,3 @@
-au BufRead,BufNewFile *.cld	set filetype=cauldron
+augroup filetypedetect
+	au BufRead,BufNewFile *.cld	set filetype=xml.cauldron
+augroup END

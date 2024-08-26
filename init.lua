@@ -15,6 +15,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.o.number = true
+vim.o.relativenumber = true;
 vim.o.mouse = 'a'
 vim.o.incsearch = true
 vim.o.hlsearch = true
@@ -24,7 +25,22 @@ vim.o.shiftwidth = 4
 vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
-vim.keymap.set('n', '<leader>l', 'aLOG.info("\\033[32m" + "" + "\\033[0m");' .. string.rep('<left>', 15), {})
+vim.keymap.set('n', '<leader>lar', 'aLOG.info("\\033[31m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
+vim.keymap.set('n', '<leader>lag', 'aLOG.info("\\033[32m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
+vim.keymap.set('n', '<leader>lay', 'aLOG.info("\\033[33m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
+vim.keymap.set('n', '<leader>lir', 'iLOG.info("\\033[31m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
+vim.keymap.set('n', '<leader>lig', 'iLOG.info("\\033[32m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
+vim.keymap.set('n', '<leader>liy', 'iLOG.info("\\033[33m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
+--learn vim motions
+vim.api.nvim_set_keymap('', '<Up>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Down>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Left>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<Right>', '<Nop>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('i', '<Up>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<Down>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<Left>', '<Nop>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<Right>', '<Nop>', { noremap = true, silent = true })
 
 local function insertFullPath()
   local filepath = vim.fn.expand('%')
@@ -54,23 +70,65 @@ require("lazy").setup({
 		"mattn/emmet-vim",
 		"tpope/vim-surround", {
 			"nvim-telescope/telescope.nvim",
+			event = 'VimEnter',
 			version = "*",
-			dependencies = { "nvim-lua/plenary.nvim" },
+			dependencies = {
+				'nvim-lua/plenary.nvim',
+				{
+					'nvim-telescope/telescope-fzf-native.nvim',
+					build = 'make',
+
+					cond = function()
+						return vim.fn.executable 'make' == 1
+					end,
+				},
+				{ 'nvim-telescope/telescope-ui-select.nvim' },
+			},
 			config = function()
+				require('telescope').setup {
+					extensions = {
+						require("telescope.themes").get_dropdown()
+					}
+				}
+
+				pcall(require('telescope').load_extension, 'fzf')
+				pcall(require('telescope').load_extension, 'ui-select')
+
 				local builtin = require('telescope.builtin')
-				vim.keymap.set('n', '<leader>f', builtin.find_files, {})
-				vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
+				--vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = '[F] Find Files' })
+				--vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = '[G] Find in' })
+				vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+				vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+				vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+				vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+				vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+				vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+				vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+				vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+				vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+				vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 			end
-		}, {
-			'nvim-telescope/telescope-fzf-native.nvim',
-			build = 'make',
-			cond = function()
-				return vim.fn.executable 'make' == 1
-			end
-		}, {
+		},
+		{
+		"folke/which-key.nvim",
+			event = "VeryLazy",
+			opts = {
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
+			},
+			keys = {{
+			  "<leader>?",
+			  function()
+				require("which-key").show({ global = false })
+			  end,
+			  desc = "Buffer Local Keymaps (which-key)"
+			}}
+		},
+		{
 			"tpope/vim-fugitive",
 			config = function()
-				vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", {})
+				vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", { desc = "[G] Git [B]lame"})
 			end
 		},
 		"tpope/vim-dadbod",
@@ -114,7 +172,7 @@ require("lazy").setup({
 		{
 			"mbbill/undotree",
 			config = function ()
-				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = "UndotreeToggle" })
 			end
 		},
 		{ -- Adds git related signs to the gutter, as well as utilities for managing changes

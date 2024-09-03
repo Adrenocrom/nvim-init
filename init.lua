@@ -110,7 +110,7 @@ require("lazy").setup({
 			end
 		},
 		{
-		"folke/which-key.nvim",
+			"folke/which-key.nvim",
 			event = "VeryLazy",
 			opts = {
 			-- your configuration comes here
@@ -148,6 +148,8 @@ require("lazy").setup({
 					}
 				})
 
+				vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<CR>", { desc = "[t]oggle nvimtree" })
+				vim.keymap.set("n", "<leader>tr", ":NvimTreeRefresh<CR>", { desc = "[t]oggle nvimtree" })
 				vim.cmd.NvimTreeOpen()
 			end
 		},
@@ -259,7 +261,7 @@ require("lazy").setup({
 							cmd = {
 								'java',
 								'-jar',
-								'~/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
+								'/home/josef/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
 							},
 							root_dir = lspconfig.util.root_pattern("*.cld", "pom.xml"),
 							filetypes = { 'xml.cauldron' },

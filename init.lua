@@ -172,6 +172,25 @@ require("lazy").setup({
 			end
 		},
 		{
+			"David-Kunz/gen.nvim",
+			dependencies = {
+				'jpmcb/nvim-llama',
+			},
+			config = function ()
+				local model_name = "llama3.2";
+			 	require('nvim-llama').setup {
+					model = model_name
+				}
+				require('gen').setup({
+				  -- same as above
+					model = model_name,
+					display_mode = "split",
+					show_prompt = true,
+					show_model = true
+				})
+			end
+		},
+		{
 			"mbbill/undotree",
 			config = function ()
 				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = "UndotreeToggle" })

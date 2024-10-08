@@ -177,7 +177,7 @@ require("lazy").setup({
 				'jpmcb/nvim-llama',
 			},
 			config = function ()
-				local model_name = "llama3.2";
+				local model_name = "llama3.1:8b";
 			 	require('nvim-llama').setup {
 					model = model_name
 				}
@@ -188,6 +188,18 @@ require("lazy").setup({
 					show_prompt = true,
 					show_model = true
 				})
+
+				require('gen').prompts['Fix_Code'] = {
+					prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
+
+				require('gen').prompts['Shorter_Code'] = {
+					prompt = "Rewrite the code as short as possible. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
 			end
 		},
 		{

@@ -177,7 +177,7 @@ require("lazy").setup({
 --				'jpmcb/nvim-llama',
 --			},
 			config = function ()
-				local model_name = "llama3.1:8b";
+				local model_name = "llama3.2";
 --			 	require('nvim-llama').setup {
 --					model = model_name
 --				}

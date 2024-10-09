@@ -202,6 +202,7 @@ require("lazy").setup({
 				}
 
 				vim.keymap.set('n', '<leader>a', vim.cmd.Gen, { desc = ' Ai agent' })
+				vim.keymap.set('v', '<leader>a', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
 				vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
 			end
 		},

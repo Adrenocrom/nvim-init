@@ -173,14 +173,14 @@ require("lazy").setup({
 		},
 		{
 			"David-Kunz/gen.nvim",
-			dependencies = {
-				'jpmcb/nvim-llama',
-			},
+--			dependencies = {
+--				'jpmcb/nvim-llama',
+--			},
 			config = function ()
 				local model_name = "llama3.1:8b";
-			 	require('nvim-llama').setup {
-					model = model_name
-				}
+--			 	require('nvim-llama').setup {
+--					model = model_name
+--				}
 				require('gen').setup({
 				  -- same as above
 					model = model_name,
@@ -200,6 +200,9 @@ require("lazy").setup({
 					replace = true,
 					extract = "```$filetype\n(.-)```"
 				}
+
+				vim.keymap.set('n', '<leader>a', vim.cmd.Gen, { desc = ' Ai agent' })
+				vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
 			end
 		},
 		{

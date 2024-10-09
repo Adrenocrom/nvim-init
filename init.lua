@@ -186,7 +186,8 @@ require("lazy").setup({
 					model = model_name,
 					display_mode = "split",
 					show_prompt = true,
-					show_model = true
+					show_model = true,
+					no_auto_close = true
 				})
 
 				require('gen').prompts['Fix_Code'] = {

@@ -30,6 +30,10 @@ The debugger can be opened with F7 key
 
         :Mason
 
+* __ollama__ needed for offline ai assist
+
+* __curl__ needed for offline ai assits requests
+
 ### maven.config
 
 This config is only needed if you need to setup special maven configs.

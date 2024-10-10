@@ -148,8 +148,8 @@ require("lazy").setup({
 					}
 				})
 
-				vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<CR>", { desc = "[t]oggle nvimtree" })
-				vim.keymap.set("n", "<leader>tr", ":NvimTreeRefresh<CR>", { desc = "[t]oggle nvimtree" })
+				vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle, { desc = "[t]oggle nvimtree" })
+				vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]oggle nvimtree" })
 				vim.cmd.NvimTreeOpen()
 			end
 		},
@@ -173,16 +173,9 @@ require("lazy").setup({
 		},
 		{
 			"David-Kunz/gen.nvim",
---			dependencies = {
---				'jpmcb/nvim-llama',
---			},
 			config = function ()
 				local model_name = "llama3.2";
---			 	require('nvim-llama').setup {
---					model = model_name
---				}
 				require('gen').setup({
-				  -- same as above
 					model = model_name,
 					display_mode = "split",
 					show_prompt = true,

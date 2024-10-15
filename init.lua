@@ -48,6 +48,7 @@ local function insertFullPath()
 end
 
 vim.keymap.set('n', '<leader>p>', insertFullPath, { noremap = true, silent = true })
+vim.keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true }) -- insert for testing
 
 vim.cmd([[
 	vnoremap < <gv

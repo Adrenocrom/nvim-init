@@ -156,14 +156,17 @@ require("lazy").setup({
 			"nvim-tree/nvim-tree.lua",
 			config = function()
 				require("nvim-tree").setup({
+					update_focused_file = {
+						enable = true
+					},
 					renderer = {
 						group_empty = true
 					}
 				})
 
 				vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle, { desc = "[t]oggle nvimtree" })
-				vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]oggle nvimtree" })
-				vim.cmd.NvimTreeOpen()
+				vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]ree [r]refresn nvimtree" })
+				--vim.cmd.NvimTreeOpen()
 			end
 		},
 		{

@@ -47,8 +47,17 @@ local function insertFullPath()
   vim.fn.setreg('+', filepath) -- write to clippoard
 end
 
-vim.keymap.set('n', '<leader>p>', insertFullPath, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>p', insertFullPath, { noremap = true, silent = true })
 vim.keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true }) -- insert for testing
+
+local function storeSession()
+	vim.cmd.DapTerminate()
+	vim.cmd.NvimTreeClose()
+	vim.cmd.mksession { bang = true }
+	vim.cmd.qa()
+end
+
+vim.keymap.set('n', '<leader>qa', storeSession, { noremap = true, silent = true, desc = "[Q] Quit [A] All and store Session" })
 
 vim.cmd([[
 	vnoremap < <gv

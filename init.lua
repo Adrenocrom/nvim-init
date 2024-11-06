@@ -53,6 +53,7 @@ vim.keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true }) -- insert 
 local sessionpath = vim.fn.getcwd() .. '/Session.vim'
 local function storeSession()
 	vim.cmd.DapTerminate()
+	require("dapui").close();
 	vim.cmd.NvimTreeClose()
 	vim.cmd.mksession { args = { sessionpath }, bang = true }
 	vim.cmd.qa()

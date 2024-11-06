@@ -50,10 +50,11 @@ end
 vim.keymap.set('n', '<leader>p', insertFullPath, { noremap = true, silent = true })
 vim.keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true }) -- insert for testing
 
+local sessionpath = vim.fn.getcwd() .. '/Session.vim'
 local function storeSession()
 	vim.cmd.DapTerminate()
 	vim.cmd.NvimTreeClose()
-	vim.cmd.mksession { bang = true }
+	vim.cmd.mksession { args = { sessionpath }, bang = true }
 	vim.cmd.qa()
 end
 

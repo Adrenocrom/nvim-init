@@ -317,10 +317,15 @@ require("lazy").setup({
 							cmd = {
 								'java',
 								'-jar',
-								'/home/josef/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
+								'/home/josef/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar',
+								'-data',
+								lspconfig.util.path.concat("/home/josef/Dokumente/alaun")
 							},
 							root_dir = lspconfig.util.root_pattern("pom.xml"),
 							filetypes = { 'xml.cauldron' },
+							init_options = {
+								workspace = lspconfig.util.path.concat("/home/josef/Dokumente/alaun")
+							}
 						},
 				  	}
 				end

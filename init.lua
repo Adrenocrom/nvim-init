@@ -42,6 +42,8 @@ vim.api.nvim_set_keymap('i', '<Down>', '<Nop>', { noremap = true, silent = true 
 vim.api.nvim_set_keymap('i', '<Left>', '<Nop>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<Right>', '<Nop>', { noremap = true, silent = true })
 
+vim.diagnostic.config({ virtual_text = true })
+
 local function insertFullPath()
   local filepath = vim.fn.expand('%')
   vim.fn.setreg('+', filepath) -- write to clippoard
@@ -604,7 +606,6 @@ require("lazy").setup({
 				vim.fn.sign_define('DapBreakpointRejected', { text='', texthl='DapBreakpoint', linehl='', numhl= 'DapBreakpoint' })
 				vim.fn.sign_define('DapLogPoint', { text='', texthl='DapLogPoint', linehl='', numhl= 'DapLogPoint' })
 				vim.fn.sign_define('DapStopped', { text='', texthl='DapStopped', linehl='DapStopped', numhl= 'DapStopped' })
-				--vim.fn.sign_define('DapStopped', { text = '->', texthl = 'DapStopped', linehl = 'DapStopped', numhl = 'DapStopped' })
 
 				dap.listeners.after.event_initialized['dapui_config'] = dapui.open
 				dap.listeners.before.event_terminated['dapui_config'] = dapui.close

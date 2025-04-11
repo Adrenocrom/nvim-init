@@ -201,6 +201,35 @@ require("lazy").setup({
 			end
 		},
 		{
+			"David-Kunz/gen.nvim",
+			config = function ()
+				local model_name = "llama3.2";
+				require('gen').setup({
+					model = model_name,
+					display_mode = "split",
+					show_prompt = true,
+					show_model = true,
+					no_auto_close = true
+				})
+
+				require('gen').prompts['Fix_Code'] = {
+					prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
+
+				require('gen').prompts['Shorter_Code'] = {
+					prompt = "Rewrite the code as short as possible. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
+
+				--vim.keymap.set('n', '<leader>a', vim.cmd.Gen, { desc = ' Ai agent' })
+				--vim.keymap.set('v', '<leader>a', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
+				--vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
+			end
+		},
+		{
 			"mbbill/undotree",
 			config = function ()
 				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = "UndotreeToggle" })
@@ -597,7 +626,7 @@ require("lazy").setup({
 				-- for example
 				provider = "ollama",
 				ollama = {
-					model = "deepseek-r1:1.5b",
+					model = "llama3.2",
 				}
 			},
 			-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

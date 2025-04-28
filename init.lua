@@ -74,6 +74,8 @@ vim.cmd.hi 'Normal guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'
 
 vim.cmd.hi 'Pmenu guibg=NONE ctermbg=NONE'
+vim.cmd.hi 'Identifier guifg=#ff88ff'
+vim.cmd.hi 'Directory guifg=#ff88ff'
 
 require("lazy").setup({
 	ui = {

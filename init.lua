@@ -596,13 +596,15 @@ require("lazy").setup({
 			version = false, -- Never set this value to "*"! Never!
 			opts = {
 				provider = "ollama",
+				auto_suggestions_provider = 'ollama',
 				cursor_applying_provider = 'ollama',
 				behaviour = {
 					enable_cursor_planning_mode = true,
+					enable_token_counting = false
 				},
 				ollama = {
-					model = "llama3.2"
-				}
+					model = 'llama3.2:1b',
+				},
 			},
 			-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
 			build = "make",

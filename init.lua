@@ -252,7 +252,11 @@ require("lazy").setup({
 				})
 
 
-				require('mason').setup()
+				require('mason').setup({
+					ui = {
+						border = "single",
+					}
+				})
 				require('mason-lspconfig').setup()
 			end
 		},

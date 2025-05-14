@@ -194,7 +194,7 @@ require("lazy").setup({
 				local model_name = "llama3.2";
 				require('gen').setup({
 					model = model_name,
-					display_mode = "split",
+					display_mode = "vertical-split",
 					show_prompt = true,
 					show_model = true,
 					no_auto_close = true

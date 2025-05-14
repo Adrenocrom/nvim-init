@@ -165,7 +165,6 @@ require("lazy").setup({
 
 				vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle, { desc = "[t]oggle nvimtree" })
 				vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]ree [r]refresn nvimtree" })
-				--vim.cmd.NvimTreeOpen()
 			end
 		},
 		{
@@ -187,12 +186,41 @@ require("lazy").setup({
 			end
 		},
 		{
+			"David-Kunz/gen.nvim",
+			config = function ()
+				local model_name = "llama3.2";
+				require('gen').setup({
+					model = model_name,
+					display_mode = "split",
+					show_prompt = true,
+					show_model = true,
+					no_auto_close = true
+				})
+
+				require('gen').prompts['Fix_Code'] = {
+					prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
+
+				require('gen').prompts['Shorter_Code'] = {
+					prompt = "Rewrite the code as short as possible. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+					replace = true,
+					extract = "```$filetype\n(.-)```"
+				}
+
+				vim.keymap.set('n', '<leader>a', vim.cmd.Gen, { desc = ' Ai agent' })
+				vim.keymap.set('v', '<leader>a', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
+				vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
+			end
+		},
+		{
 			"mbbill/undotree",
 			config = function ()
 				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = "UndotreeToggle" })
 			end
 		},
-		{ -- Adds git related signs to the gutter, as well as utilities for managing changes
+		{
 			'lewis6991/gitsigns.nvim',
 			config = function ()
 				vim.cmd.hi "GitSignsAdd guifg='#00ff00'"
@@ -209,7 +237,7 @@ require("lazy").setup({
 
 			end
 		},
-		{ -- LSP Configuration & Plugins
+		{
 			'neovim/nvim-lspconfig',
 			dependencies = {
 				"mason-org/mason.nvim",
@@ -491,63 +519,5 @@ require("lazy").setup({
 				dap.listeners.before.event_exited['dapui_config'] = dapui.close
 			end,
 		},
-		{
-			"yetone/avante.nvim",
-			event = "VeryLazy",
-			version = false, -- Never set this value to "*"! Never!
-			opts = {
-				provider = "ollama",
-				auto_suggestions_provider = 'ollama',
-				cursor_applying_provider = 'ollama',
-				behaviour = {
-					enable_cursor_planning_mode = true,
-					enable_token_counting = false
-				},
-				ollama = {
-					model = 'llama3.2:1b',
-				},
-			},
-			-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-			build = "make",
-			-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-			dependencies = {
-				"nvim-treesitter/nvim-treesitter",
-				"stevearc/dressing.nvim",
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-				--- The below dependencies are optional,
-				"echasnovski/mini.pick", -- for file_selector provider mini.pick
-				"nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-				"hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-				"ibhagwan/fzf-lua", -- for file_selector provider fzf
-				"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-				"zbirenbaum/copilot.lua", -- for providers='copilot'
-				{
-					-- support for image pasting
-					"HakonHarnes/img-clip.nvim",
-					event = "VeryLazy",
-					opts = {
-						-- recommended settings
-						default = {
-							embed_image_as_base64 = false,
-							prompt_for_file_name = false,
-							drag_and_drop = {
-								insert_mode = true,
-							},
-							-- required for Windows users
-							use_absolute_path = true,
-						},
-					},
-				},
-				{
-					-- Make sure to set this up properly if you have lazy=true
-					'MeanderingProgrammer/render-markdown.nvim',
-					opts = {
-						file_types = { "markdown", "Avante" },
-					},
-					ft = { "markdown", "Avante" },
-				},
-			},
-		}
 	}
 })

@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
 		"clone",
 		"--filter=blob:none",
 		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
+		"--branch=stable",
 		lazypath,
 	})
 end
@@ -238,13 +238,12 @@ require("lazy").setup({
 			end
 		},
 		{
-			'neovim/nvim-lspconfig',
+			"neovim/nvim-lspconfig",
 			dependencies = {
 				"mason-org/mason.nvim",
 				"mason-org/mason-lspconfig.nvim",
 				"mfussenegger/nvim-jdtls",
 			},
-
 			config = function()
 				vim.diagnostic.config({
 					signs = {
@@ -258,7 +257,6 @@ require("lazy").setup({
 				})
 
 				vim.api.nvim_create_autocmd('LspAttach', {
-
 					group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
 					callback = function(event)
 						local map = function(keys, func, desc)
@@ -279,13 +277,21 @@ require("lazy").setup({
 					end
 				})
 
-
 				require('mason').setup({
 					ui = {
 						border = "single",
 					}
 				})
-				require('mason-lspconfig').setup()
+
+				require('mason-lspconfig').setup({
+					ensure_installed = {
+						"lua_ls",
+						"jdtls",
+						"denols",
+						"rust_analyzer",
+						"cssls",
+					},
+				})
 			end
 		},
 		{
@@ -324,8 +330,6 @@ require("lazy").setup({
 					},
 					completion = { completeopt = 'menu,menuone,noinsert' },
 					mapping = cmp.mapping.preset.insert {
-						-- If you prefer more traditional completion keymaps,
-						-- you can uncomment the following lines
 						['<CR>'] = cmp.mapping.confirm { select = true },
 						['<Tab>'] = cmp.mapping.select_next_item(),
 						['<S-Tab>'] = cmp.mapping.select_prev_item(),
@@ -369,7 +373,7 @@ require("lazy").setup({
 		},
 		{
 			"folke/trouble.nvim",
-			opts = {}, -- for default options, refer to the configuration section for custom setup.
+			opts = {},
 			cmd = "Trouble",
 			keys = {
 				{
@@ -409,19 +413,10 @@ require("lazy").setup({
 			dependencies = {
 				'rcarriga/nvim-dap-ui',
 				'nvim-neotest/nvim-nio',
-				'williamboman/mason.nvim',
-				'jay-babu/mason-nvim-dap.nvim',
 			},
 			config = function()
 				local dap = require 'dap'
 				local dapui = require 'dapui'
-				require('mason-nvim-dap').setup {
-					automatic_installation = true,
-					handlers = {},
-					ensure_installed = {
-						'delve',
-					},
-				}
 
 				vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
 				vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })

@@ -129,6 +129,9 @@ require("lazy").setup({
 		},
 		{
 			"folke/which-key.nvim",
+			dependencies = {
+				'echasnovski/mini.icons',
+			},
 			event = "VeryLazy",
 			keys = {{
 				"<leader>?",
@@ -283,15 +286,7 @@ require("lazy").setup({
 					}
 				})
 
-				require('mason-lspconfig').setup({
-					ensure_installed = {
-						"lua_ls",
-						"jdtls",
-						"denols",
-						"rust_analyzer",
-						"cssls",
-					},
-				})
+				require('mason-lspconfig').setup()
 			end
 		},
 		{
@@ -456,7 +451,6 @@ require("lazy").setup({
 						collapsed = "",
 						current_frame = "",
 						expanded = "",
-						--expanded = '▾', collapsed = '▸', current_frame = '*'
 					},
 					layouts = { {
 						elements = { {

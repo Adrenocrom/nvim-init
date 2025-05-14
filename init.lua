@@ -44,14 +44,6 @@ vim.api.nvim_set_keymap('i', '<Right>', '<Nop>', { noremap = true, silent = true
 
 vim.diagnostic.config({ virtual_text = true })
 
-local function insertFullPath()
-	local filepath = vim.fn.expand('%')
-	vim.fn.setreg('+', filepath) -- write to clippoard
-end
-
-vim.keymap.set('n', '<leader>p', insertFullPath, { noremap = true, silent = true })
-vim.keymap.set('i', 'jk', '<ESC>', { noremap = true, silent = true }) -- insert for testing
-
 local sessionpath = vim.fn.getcwd() .. '/Session.vim'
 local function storeSession()
 	vim.cmd.DapTerminate()
@@ -123,8 +115,6 @@ require("lazy").setup({
 				pcall(require('telescope').load_extension, 'ui-select')
 
 				local builtin = require('telescope.builtin')
-				--vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = '[F] Find Files' })
-				--vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = '[G] Find in' })
 				vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
 				vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
 				vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -140,11 +130,6 @@ require("lazy").setup({
 		{
 			"folke/which-key.nvim",
 			event = "VeryLazy",
-			opts = {
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
-			},
 			keys = {{
 				"<leader>?",
 				function()
@@ -166,7 +151,6 @@ require("lazy").setup({
 				vim.api.nvim_set_keymap("n", "<F8>", ":Tagbar<CR>", {})
 			end
 		},
-		"preservim/nerdtree",
 		"nvim-tree/nvim-web-devicons", {
 			"nvim-tree/nvim-tree.lua",
 			config = function()
@@ -283,51 +267,13 @@ require("lazy").setup({
 				local capabilities = vim.lsp.protocol.make_client_capabilities()
 				capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-				-- cauldron lsp 
-				--local lspconfig = require 'lspconfig'
-				--local configs = require 'lspconfig.configs'
-				--if not configs.cauldron_ls then
-				--	configs.cauldron_ls = {
-				--		default_config = {
-				--			cmd = {
-				--				'java',
-				--				'-jar',
-				--				'/home/josef/Dokumente/alaun/org.alaun.cauldron.ls/target/ls-0.0.1-SNAPSHOT-jar-with-dependencies.jar',
-				--				'-data',
-				--				"/home/josef/Dokumente/alaun"
-				--			},
-				--			root_dir = lspconfig.util.root_pattern("pom.xml"),
-				--			filetypes = { 'xml.cauldron' },
-				--			init_options = {
-				--				workspace = "/home/josef/Dokumente/alaun"
-				--			}
-				--		},
-				--  	}
-				--end
-				--lspconfig.cauldron_ls.setup {
-				--	capabilities = capabilities
-				--}
-				-- cauldron lsp 
-
-				local servers = {
-					lua_ls = {
-						settings = {
-							Lua = {
-								completion = {
-									callSnippet = 'Replace',
-								},
-							},
-						},
-					}
-				}
-
 				require('mason').setup({
 					ui = {
 						border = "single"
 					}
 				})
-				local ensure_installed = vim.tbl_keys(servers or { })
-				require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+				require('mason-tool-installer').setup()
 
 				require('mason-lspconfig').setup {
 					handlers = {

@@ -212,30 +212,11 @@ require("lazy").setup({
 		{ -- LSP Configuration & Plugins
 			'neovim/nvim-lspconfig',
 			dependencies = {
-				-- Automatically install LSPs and related tools to stdpath for Neovim
-				{ 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-				'williamboman/mason-lspconfig.nvim',
-				'WhoIsSethDaniel/mason-tool-installer.nvim',
-				'nvim-java/nvim-java',
-
-				-- Useful status updates for LSP.
-				-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-				{ 'j-hui/fidget.nvim', opts = {} },
-				{
-					"folke/lazydev.nvim",
-					ft = "lua", -- only load on lua files
-					opts = {
-						library = {
-							-- See the configuration section for more details
-							-- Load luvit types when the `vim.uv` word is found
-							{ path = "luvit-meta/library", words = { "vim%.uv" } },
-						}
-					}
-				}
-				-- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
-				-- used for completion, annotations and signatures of Neovim apis
-				-- { 'folke/neodev.nvim', opts = {} },
+				"mason-org/mason.nvim",
+				"mason-org/mason-lspconfig.nvim",
+				"mfussenegger/nvim-jdtls",
 			},
+
 			config = function()
 				vim.fn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticSignError' })
 				vim.fn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticSignWarn' })
@@ -264,45 +245,15 @@ require("lazy").setup({
 					end
 				})
 
-				local capabilities = vim.lsp.protocol.make_client_capabilities()
-				capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-				require('mason').setup({
-					ui = {
-						border = "single"
-					}
-				})
-
-				require('mason-tool-installer').setup()
-
-				require('mason-lspconfig').setup {
-					handlers = {
-						function(server_name)
-							local server = servers[server_name] or {}
-
-							server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-							require('lspconfig')[server_name].setup(server)
-						end,
-						jdtls = function()
-							require('java').setup { }
-							require('lspconfig').jdtls.setup({
-								settings = {
-									java = {
-										configuration = {
-											runtimes = {
-												{
-													name = "current",
-													path = "~/.sdkman/candidates/java/current",
-													default = true
-												}
-											}
-										}
-									}
-								}
-							})
-						end
+				require('mason').setup()
+				require('mason-lspconfig').setup()
+				require('jdtls').start_or_attach({
+					cmd = {
+						vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls")
 					},
-				}
+					root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.pom', '.git', 'mvnw'}, { upward = true })[1]),
+				})
 			end
 		},
 		{

@@ -66,6 +66,8 @@ vim.cmd.hi 'Normal guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'
 
 vim.cmd.hi 'Pmenu guibg=NONE ctermbg=NONE'
+--vim.cmd.hi 'Folded guibg=NONE ctermbg=NONE'
+vim.cmd.hi 'FoldColumn guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'Identifier guifg=#ff88ff'
 vim.cmd.hi 'Directory guifg=#ff88ff'
 
@@ -115,15 +117,15 @@ require("lazy").setup({
 				pcall(require('telescope').load_extension, 'ui-select')
 
 				local builtin = require('telescope.builtin')
-				vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-				vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-				vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-				vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-				vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-				vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-				vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-				vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-				vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+				vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S] Find [H]elp' })
+				vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S] Find [K]eymaps' })
+				vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
+				vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S] Find [S]elect Telescope' })
+				vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S] Find current [W]ord' })
+				vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S] Find by [G]rep' })
+				vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S] Find [D]iagnostics' })
+				vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S] Find [R]esume' })
+				vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S] Find Recent Files ("." for repeat)' })
 				vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 			end
 		},
@@ -218,13 +220,56 @@ require("lazy").setup({
 			end
 		},
 		{
+			"milanglacier/minuet-ai.nvim",
+			config = function()
+				require('minuet').setup {
+					cmp = {
+						enable_auto_complete = true,
+					},
+					blink = {
+						enable_auto_complete = false,
+					},
+					provider = 'openai_fim_compatible',
+					n_completions = 1,
+					context_window = 512,
+					provider_options = {
+						openai_fim_compatible = {
+							api_key = 'TERM',
+							name = 'Ollama',
+							end_point = 'http://localhost:11434/v1/completions',
+							model = 'qwen2.5-coder:1.5b',
+							optional = {
+								max_tokens = 32,
+								top_p = 0.9,
+							},
+						},
+					},
+					virtualtext = {
+						auto_trigger_ft = { "*" },
+						keymap = {
+							accept = '<A-A>',
+							accept_line = '<A-a>',
+							accept_n_lines = '<A-z>',
+							prev = '<A-[>',
+							next = '<A-]>',
+							dismiss = '<A-e>',
+						},
+						show_on_completion_menu = false,
+					},
+				}
+			end,
+			dependencies = {
+				"nvim-lua/plenary.nvim"
+			}
+		},
+		{
 			"mbbill/undotree",
 			config = function ()
 				vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = "UndotreeToggle" })
 			end
 		},
 		{
-			'lewis6991/gitsigns.nvim',
+			"lewis6991/gitsigns.nvim",
 			config = function ()
 				vim.cmd.hi "GitSignsAdd guifg='#00ff00'"
 				vim.cmd.hi "GitSignsDelete guifg='#ff0000'"

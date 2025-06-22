@@ -68,8 +68,8 @@ vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'Pmenu guibg=NONE ctermbg=NONE'
 --vim.cmd.hi 'Folded guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'FoldColumn guibg=NONE ctermbg=NONE'
-vim.cmd.hi 'Identifier guifg=#ff88ff'
-vim.cmd.hi 'Directory guifg=#ff88ff'
+--vim.cmd.hi 'Identifier guifg=#ff88ff'
+--vim.cmd.hi 'Directory guifg=#ff88ff'
 
 require("lazy").setup({
 	ui = {
@@ -240,7 +240,8 @@ require("lazy").setup({
 							model = 'qwen2.5-coder:1.5b',
 							optional = {
 								max_tokens = 32,
-								top_p = 0.9,
+								top_p = 0.1,
+								top_k = 100,
 							},
 						},
 					},
@@ -277,7 +278,7 @@ require("lazy").setup({
 					signs = {
 						add = { text = '+' },
 						change = { text = '~' },
-						delete = { text = '_' },
+						delete = { text = '-' },
 						topdelete = { text = '‾' },
 						changedelete = { text = '~' },
 					}
@@ -312,7 +313,7 @@ require("lazy").setup({
 						end
 
 						map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-						map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+						--map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 						map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 						map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 						map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')

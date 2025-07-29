@@ -31,6 +31,10 @@ vim.keymap.set('n', '<leader>lay', 'aLOG.info("\\033[33m" + + "\\033[0m");' .. s
 vim.keymap.set('n', '<leader>lir', 'iLOG.info("\\033[31m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
 vim.keymap.set('n', '<leader>lig', 'iLOG.info("\\033[32m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
 vim.keymap.set('n', '<leader>liy', 'iLOG.info("\\033[33m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
+
+vim.keymap.set('n', '<leader>n', ':cnext<CR>', { desc = "Quickfix next"});
+vim.keymap.set('n', '<leader>p', ':cprevious<CR>', { desc = "Quickfix previous"});
+
 --learn vim motions
 vim.api.nvim_set_keymap('', '<Up>', '<Nop>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('', '<Down>', '<Nop>', { noremap = true, silent = true })
@@ -193,7 +197,7 @@ require("lazy").setup({
 		{
 			"David-Kunz/gen.nvim",
 			config = function ()
-				local model_name = "llama3.2";
+				local model_name = "deepseek-r1:14b";
 				require('gen').setup({
 					model = model_name,
 					display_mode = "vertical-split",
@@ -237,9 +241,9 @@ require("lazy").setup({
 							api_key = 'TERM',
 							name = 'Ollama',
 							end_point = 'http://localhost:11434/v1/completions',
-							model = 'qwen2.5-coder:1.5b',
+							model = 'qwen2.5-coder:3b',
 							optional = {
-								max_tokens = 32,
+								max_tokens = 1024,
 								top_p = 0.1,
 								top_k = 100,
 							},
@@ -313,7 +317,7 @@ require("lazy").setup({
 						end
 
 						map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-						--map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+						map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 						map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 						map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 						map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')

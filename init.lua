@@ -297,6 +297,7 @@ require("lazy").setup({
 				"mason-org/mason-lspconfig.nvim",
 				"mfussenegger/nvim-jdtls",
 			},
+
 			config = function()
 				vim.diagnostic.config({
 					signs = {

@@ -25,12 +25,12 @@ vim.o.shiftwidth = 4
 vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
-vim.keymap.set('n', '<leader>lar', 'aLOG.info("\\033[31m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
-vim.keymap.set('n', '<leader>lag', 'aLOG.info("\\033[32m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
-vim.keymap.set('n', '<leader>lay', 'aLOG.info("\\033[33m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
-vim.keymap.set('n', '<leader>lir', 'iLOG.info("\\033[31m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
-vim.keymap.set('n', '<leader>lig', 'iLOG.info("\\033[32m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
-vim.keymap.set('n', '<leader>liy', 'iLOG.info("\\033[33m" + + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
+vim.keymap.set('n', '<leader>lar', 'aLOG.info("\\033[31m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
+vim.keymap.set('n', '<leader>lag', 'aLOG.info("\\033[32m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
+vim.keymap.set('n', '<leader>lay', 'aLOG.info("\\033[33m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
+vim.keymap.set('n', '<leader>lir', 'iLOG.info("\\033[31m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
+vim.keymap.set('n', '<leader>lig', 'iLOG.info("\\033[32m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
+vim.keymap.set('n', '<leader>liy', 'iLOG.info("\\033[33m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG yellow"})
 
 vim.keymap.set('n', '<leader>n', ':cnext<CR>', { desc = "Quickfix next"});
 vim.keymap.set('n', '<leader>p', ':cprevious<CR>', { desc = "Quickfix previous"});

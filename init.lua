@@ -195,9 +195,90 @@ require("lazy").setup({
 			end
 		},
 		{
+			"olimorris/codecompanion.nvim",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"nvim-treesitter/nvim-treesitter",
+				"j-hui/fidget.nvim",
+			},
+			config = function ()
+				require("codecompanion").setup({
+					adapters = {
+						opts = {
+							show_defaults = false,
+						},
+						gpt_oss = function()
+							return require("codecompanion.adapters").extend("ollama", {
+								name = "gpt-oss",
+								opts = {
+									vision = true,
+									stream = true,
+								},
+								schema = {
+									model = {
+										default = "gpt-oss:20b",
+									},
+									keep_alive = {
+										default = "5m"
+									}
+								},
+							})
+						end,
+					},
+					strategies = {
+						chat = {
+							adapter = "gpt_oss",
+						},
+						inline = {
+							adapter = "gpt_oss",
+						},
+						cmd = {
+							adapter = "gpt_oss",
+						}
+					},
+				})
+
+				local progress = require("fidget.progress")
+				local handles = {}
+				local group = vim.api.nvim_create_augroup("CodeCompanionFidget", {})
+
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "CodeCompanionRequestStarted",
+					group = group,
+					callback = function(e)
+						handles[e.data.id] = progress.handle.create({
+							title = "CodeCompanion",
+							message = "Thinking...",
+							lsp_client = { name = e.data.adapter.formatted_name },
+						})
+					end,
+				})
+
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "CodeCompanionRequestFinished",
+					group = group,
+					callback = function(e)
+						local h = handles[e.data.id]
+						if h then
+							h.message = e.data.status == "success" and "Done" or "Failed"
+							h:finish()
+							handles[e.data.id] = nil
+						end
+					end,
+				})
+
+				--vim.keymap.set('n', '<leader>a', vim.cmd.CodeCompanionActions, { desc = ' Ai agent' })
+				--vim.keymap.set('v', '<leader>a', ":'<,'>CodeCompanionActions<cr>", { desc = ' Ai agent' })
+			end
+		},
+		{
+			"MeanderingProgrammer/render-markdown.nvim",
+			ft = { "codecompanion" }
+		},
+		{
 			"David-Kunz/gen.nvim",
 			config = function ()
-				local model_name = "deepseek-r1:14b";
+				local model_name = "gpt-oss";
 				require('gen').setup({
 					model = model_name,
 					display_mode = "vertical-split",
@@ -241,7 +322,8 @@ require("lazy").setup({
 							api_key = 'TERM',
 							name = 'Ollama',
 							end_point = 'http://localhost:11434/v1/completions',
-							model = 'qwen2.5-coder:3b',
+							model = 'qwen2.5-coder:1.5b',
+							keep_alive = -1,
 							optional = {
 								max_tokens = 1024,
 								top_p = 0.1,

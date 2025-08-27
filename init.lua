@@ -197,7 +197,7 @@ require("lazy").setup({
 		{
 			"David-Kunz/gen.nvim",
 			config = function ()
-				local model_name = "gpt-oss";
+				local model_name = "gpt-oss:20b";
 				require('gen').setup({
 					model = model_name,
 					display_mode = "vertical-split",

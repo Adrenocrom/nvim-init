@@ -244,7 +244,7 @@ require("lazy").setup({
 							model = 'qwen2.5-coder:1.5b',
 							keep_alive = -1,
 							optional = {
-								max_tokens = 1024,
+								max_tokens = 2048,
 								top_p = 0.1,
 								top_k = 100,
 							},
@@ -296,7 +296,7 @@ require("lazy").setup({
 			dependencies = {
 				"mason-org/mason.nvim",
 				"mason-org/mason-lspconfig.nvim",
-				"mfussenegger/nvim-jdtls",
+				"mfussenegger/nvim-jdtls"
 			},
 
 			config = function()
@@ -523,10 +523,10 @@ require("lazy").setup({
 					}, {
 							elements = { {
 								id = "console",
-								size = 0.8
+								size = 0.5
 							}, {
 									id = "repl",
-									size = 0.2
+									size = 0.5
 								} },
 							position = "bottom",
 							size = 2

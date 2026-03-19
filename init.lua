@@ -200,7 +200,37 @@ require("lazy").setup({
 				require("opencode").setup({
 					ui = {
 						position = "left",
-					}
+					},
+					context = {
+						enabled = true, -- Enable automatic context capturing
+						cursor_data = {
+							enabled = true, -- Include cursor position and line content in the context
+							context_lines = 5, -- Number of lines before and after cursor to include in context
+						},
+						diagnostics = {
+							info = false, -- Include diagnostics info in the context (default to false
+							warn = true, -- Include diagnostics warnings in the context
+							error = true, -- Include diagnostics errors in the context
+							only_closest = false, -- If true, only diagnostics for cursor/selection
+						},
+						current_file = {
+							enabled = true, -- Include current file path and content in the context
+							show_full_path = true,
+						},
+						files = {
+							enabled = true,
+							show_full_path = true,
+						},
+						selection = {
+							enabled = true, -- Include selected text in the context
+						},
+						buffer = {
+							enabled = true, -- Disable entire buffer context by default, only used in quick chat
+						},
+						git_diff = {
+							enabled = true,
+						},
+					},
 				})
 			end,
 			dependencies = {

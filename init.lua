@@ -177,24 +177,6 @@ require("lazy").setup({
 			end
 		},
 		{
-			"nvim-treesitter/nvim-treesitter",
-			build = ":TSUpdate",
-			config = function ()
-				require("nvim-treesitter.configs").setup({
-					ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "java" },
-					sync_install = false,
-					auto_install = true,
-					ignore_install = { },
-					highlight = {
-						enable = true,
-						disable = { "xml", "cld" }
-					},
-					indent = { enable = true },
-					modules = {}
-				})
-			end
-		},
-		{
 			"sudo-tee/opencode.nvim",
 			config = function()
 				require("opencode").setup({

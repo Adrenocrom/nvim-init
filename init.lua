@@ -297,10 +297,7 @@ require("lazy").setup({
 						show_on_completion_menu = false,
 					},
 				}
-			end,
-			dependencies = {
-				"nvim-lua/plenary.nvim"
-			}
+			end
 		},
 		{
 			"mbbill/undotree",

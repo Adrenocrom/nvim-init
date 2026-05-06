@@ -55,7 +55,7 @@ local hooks = function(ev)
 		vim.system({ 'make' }, { cwd = ev.data.path })
 	end
 	if name == 'LuaSnip' and (kind == 'install' or kind == 'update') then
-		vim.system({ 'make install_jsregexp' }, { cwd = ev.data.path })
+		vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path })
 	end
 end
 

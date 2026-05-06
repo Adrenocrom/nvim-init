@@ -72,6 +72,8 @@ vim.pack.add({
 	{ src = "https://github.com/folke/which-key.nvim" },
 	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
+	{ src = "https://github.com/tpope/vim-dadbod" },
+	{ src = "https://github.com/kristijanhusak/vim-dadbod-ui" },
 	{ src = "https://github.com/majutsushi/tagbar" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://github.com/nvim-tree/nvim-tree.lua" },

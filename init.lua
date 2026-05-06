@@ -54,6 +54,9 @@ local hooks = function(ev)
 	if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
 		vim.system({ 'make' }, { cwd = ev.data.path })
 	end
+	if name == 'LuaSnip' and (kind == 'install' or kind == 'update') then
+		vim.system({ 'make install_jsregexp' }, { cwd = ev.data.path })
+	end
 end
 
 vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
@@ -72,7 +75,9 @@ vim.pack.add({
 	{ src = "https://github.com/majutsushi/tagbar" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://github.com/nvim-tree/nvim-tree.lua" },
+	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 	{ src = "https://github.com/hrsh7th/nvim-cmp" },
+	{ src = "https://github.com/saadparwaiz1/cmp_luasnip" },
 	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
 	{ src = "https://github.com/hrsh7th/cmp-path" },
 	{ src = "https://github.com/hrsh7th/cmp-buffer" },
@@ -140,7 +145,15 @@ vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle, { desc = "[t]oggle nvim
 vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]ree [r]refresn nvimtree" })
 
 local cmp = require("cmp")
+local luasnip = require 'luasnip'
+luasnip.config.setup {}
+
 cmp.setup {
+	nippet = {
+		expand = function(args)
+			luasnip.lsp_expand(args.body)
+		end,
+	},
 	window = {
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered()
@@ -151,10 +164,24 @@ cmp.setup {
 		['<Tab>'] = cmp.mapping.select_next_item(),
 		['<S-Tab>'] = cmp.mapping.select_prev_item(),
 		['<C-Space>'] = cmp.mapping.complete {},
+		['<C-L>'] = cmp.mapping(function()
+			if luasnip.expand_or_locally_jumpable() then
+				luasnip.expand_or_jump()
+			end
+		end, { 'i', 's' }),
+		['<C-h>'] = cmp.mapping(function()
+			if luasnip.locally_jumpable(-1) then
+				luasnip.jump(-1)
+			end
+		end, { 'i', 's' }),
 	},
 	sources = {
 		{
 			name = 'nvim_lsp',
+			group_index = 1
+		},
+		{
+			name = 'luasnip',
 			group_index = 1
 		},
 		{

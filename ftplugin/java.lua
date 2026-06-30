@@ -1,4 +1,5 @@
 local config = {
+	name = "jdtls",
 	cmd = {
 		vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls")
 	},
@@ -15,8 +16,15 @@ dap.configurations.java = {
 	{
 		type = 'java';
 		request = 'attach';
-		name = "Debug (Attach) - Remote";
+		name = "Debug (Attach) - Remote localhost";
 		hostName = "localhost";
+		port = 9981;
+	},
+	{
+		type = 'java';
+		request = 'attach';
+		name = "Debug (Attach) - Remote";
+		hostName = "10.10.2.91";
 		port = 9981;
 	},
 }

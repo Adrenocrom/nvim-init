@@ -280,8 +280,8 @@ require('minuet').setup {
 			keep_alive = -1,
 			optional = {
 				max_tokens = 2048,
-				top_p = 0.1,
-				top_k = 100,
+				--top_p = 0.1,
+				top_k = 1,
 			},
 		},
 	},

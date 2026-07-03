@@ -83,7 +83,7 @@ vim.pack.add({
 	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
 	{ src = "https://github.com/hrsh7th/cmp-path" },
 	{ src = "https://github.com/hrsh7th/cmp-buffer" },
-	{ src = "https://github.com/sudo-tee/opencode.nvim" },
+	--{ src = "https://github.com/sudo-tee/opencode.nvim" },
 	{ src = "https://github.com/David-Kunz/gen.nvim" },
 	{ src = "https://github.com/milanglacier/minuet-ai.nvim" },
 	{ src = "https://github.com/mbbill/undotree" },
@@ -202,41 +202,41 @@ cmp.setup {
 	},
 }
 
-require("opencode").setup({
-	ui = {
-		position = "left",
-	},
-	context = {
-		enabled = true,
-		cursor_data = {
-			enabled = true,
-			context_lines = 5,
-		},
-		diagnostics = {
-			info = false,
-			warn = true,
-			error = true,
-			only_closest = false,
-		},
-		current_file = {
-			enabled = true,
-			show_full_path = true,
-		},
-		files = {
-			enabled = true,
-			show_full_path = true,
-		},
-		selection = {
-			enabled = true,
-		},
-		buffer = {
-			enabled = true,
-		},
-		git_diff = {
-			enabled = true,
-		},
-	},
-})
+--require("opencode").setup({
+--	ui = {
+--		position = "left",
+--	},
+--	context = {
+--		enabled = true,
+--		cursor_data = {
+--			enabled = true,
+--			context_lines = 5,
+--		},
+--		diagnostics = {
+--			info = false,
+--			warn = true,
+--			error = true,
+--			only_closest = false,
+--		},
+--		current_file = {
+--			enabled = true,
+--			show_full_path = true,
+--		},
+--		files = {
+--			enabled = true,
+--			show_full_path = true,
+--		},
+--		selection = {
+--			enabled = true,
+--		},
+--		buffer = {
+--			enabled = true,
+--		},
+--		git_diff = {
+--			enabled = true,
+--		},
+--	},
+--})
 
 require('gen').setup({
 	model = "gpt-oss:20b",

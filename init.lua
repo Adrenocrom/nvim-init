@@ -97,53 +97,112 @@ vim.pack.add({
 	{ src = "https://github.com/mfussenegger/nvim-jdtls" },
 })
 
-vim.keymap.set('n', '<leader>sf', function()
-	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
-	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
-	local win_cfg = {
-		relative = 'editor',
-		width    = width,
-		height   = height,
-		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
-		style    = 'minimal',
-		border   = 'rounded',
-	}
-
-	local temp_buf = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
-	vim.cmd('terminal ' .. fzf_cmd)
-	local buf = vim.api.nvim_get_current_buf()
-
-	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-
-		if vim.api.nvim_win_is_valid(win) then
-			vim.api.nvim_win_close(win, true)
-		end
-
-		for i = #lines, 1, -1 do
-			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-			if line ~= "" and vim.fn.filereadable(line) == 1 then
-				vim.schedule(function()
-					vim.cmd('edit ' .. vim.fn.fnameescape(line))
-				end)
-				break
-			end
-		end
-	end
-
-	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
-		callback = function()
-			vim.schedule(on_fzf_exit)
-		end
-	})
-
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
-	vim.cmd('startinsert')
-end, { noremap = true, silent = true })
+--vim.keymap.set('n', '<leader>sf', function()
+--	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
+--	local width  = math.floor(vim.o.columns * 0.8)
+--	local height = math.floor(vim.o.lines    * 0.8)
+--	local win_cfg = {
+--		relative = 'editor',
+--		width    = width,
+--		height   = height,
+--		col      = math.floor((vim.o.columns - width)  / 2),
+--		row      = math.floor((vim.o.lines    - height) / 2),
+--		style    = 'minimal',
+--		border   = 'rounded',
+--	}
+--
+--	local temp_buf = vim.api.nvim_create_buf(false, true)
+--	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
+--	vim.cmd('terminal ' .. fzf_cmd)
+--	local buf = vim.api.nvim_get_current_buf()
+--
+--	local function on_fzf_exit()
+--		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+--
+--		if vim.api.nvim_win_is_valid(win) then
+--			vim.api.nvim_win_close(win, true)
+--		end
+--
+--		for i = #lines, 1, -1 do
+--			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+--			if line ~= "" and vim.fn.filereadable(line) == 1 then
+--				vim.schedule(function()
+--					vim.cmd('edit ' .. vim.fn.fnameescape(line))
+--				end)
+--				break
+--			end
+--		end
+--	end
+--
+--	vim.api.nvim_create_autocmd('TermClose', {
+--		buffer = buf,
+--		callback = function()
+--			vim.schedule(on_fzf_exit)
+--		end
+--	})
+--
+--	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+--	vim.cmd('startinsert')
+--end, { noremap = true, silent = true })
+--
+--vim.keymap.set('n', '<leader><leader>', function()
+--    local bufs = vim.api.nvim_list_bufs()
+--    local list_str = ""
+--    for _, buf_num in ipairs(bufs) do
+--        local name = vim.api.nvim_buf_get_name(buf_num)
+--        if name ~= "" then
+--            -- FIX: Use %d %s (single percent)
+--            list_str = list_str .. string.format("%d %s\n", buf_num, name)
+--        end
+--    end
+--
+--    -- Inject string directly into echo
+--    local fzf_cmd = "sh -c 'echo \"" .. list_str .. "\" | fzf --height 40% --reverse'"
+--
+--    local width  = math.floor(vim.o.columns * 0.8)
+--    local height = math.floor(vim.o.lines    * 0.4)
+--    local win_cfg = {
+--        relative = 'editor',
+--        width    = width,
+--        height   = height,
+--        col      = math.floor((vim.o.columns - width)  / 2),
+--        row      = math.floor((vim.o.lines    - height) / 2),
+--        style    = 'minimal',
+--        border   = 'rounded',
+--    }
+--
+--    local buf = vim.api.nvim_create_buf(false, true)
+--    local win = vim.api.nvim_open_win(buf, true, win_cfg)
+--    
+--    -- USE termopen to avoid E481/E499 errors
+--    vim.fn.termopen(fzf_cmd)
+--
+--    local function on_fzf_exit()
+--        local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+--        if vim.api.nvim_win_is_valid(win) then
+--            vim.api.nvim_win_close(win, true)
+--        end
+--
+--        if #lines > 0 then
+--            -- FIX: %s and %d (single percent)
+--            local line = lines[#lines]:gsub("^%s+", ""):gsub("%s+$", "")
+--            local buf_num = line:match("(%d+)")
+--            if buf_num then
+--                vim.schedule(function()
+--                    vim.cmd('buffer ' .. buf_num)
+--                end)
+--            end
+--        end
+--    end
+--
+--    vim.api.nvim_create_autocmd('TermClose', {
+--        buffer = buf,
+--        callback = function() vim.schedule(on_fzf_exit) end
+--    })
+--
+--    vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+--    vim.cmd('startinsert')
+--end, { noremap = true, silent = true })
 
 require('telescope').setup {
 	defaults = {
@@ -169,7 +228,7 @@ pcall(require('telescope').load_extension, 'ui-select')
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S] Find [H]elp' })
 vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S] Find [K]eymaps' })
---vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
+vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
 vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S] Find [S]elect Telescope' })
 vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S] Find current [W]ord' })
 vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S] Find by [G]rep' })

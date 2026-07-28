@@ -149,7 +149,6 @@ end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader><leader>', function()
 	local width  = math.floor(vim.o.columns * 0.8)
 	local height = math.floor(vim.o.lines    * 0.8)
-	
 	local win_cfg = {
 		relative = 'editor',
 		width    = width,
@@ -160,47 +159,47 @@ vim.keymap.set('n', '<leader><leader>', function()
 		border   = 'rounded',
 	}
 
-	local frame_buf = vim.api.nvim_create_buffer(false, true)
-	local win = vim.api.nvim_open_win(frame_buf, true, win_cfg)
-	
-	-- Get list of buffers and format for fzf
+
 	local bufnrs = vim.api.nvim_list_bufs()
 	local buffer_lines = {}
 	for _, bufnr in ipairs(bufnrs) do
 		if vim.api.nvim_buf_is_loaded(bufnr) then
 			local name = vim.api.nvim_buf_get_name(bufnr)
 			if name ~= '' and vim.fn.filereadable(name) == 1 then
-				table.insert(buffer_lines, name)
+				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
 			end
 		end
 	end
 
-	local input_text = table.concat(buffer_lines, '\n')
-	local fzf_cmd = 'fzf --height=' .. height .. '% --width=' .. width .. '%'
-
-	--vim.api.nvim_buf_delete(frame_buf, { force = true })
-	
-	-- Use heredoc style with echo to pass data inline
+	local input_text = table.concat(buffer_lines, '\\n')
 	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
-	local term_cmd = "echo -e '" .. safe_input .. "' | " .. fzf_cmd
+
+	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
+	print(term_cmd)
+	local term_buf = vim.api.nvim_create_buf(false, true)
+
+	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
 	vim.cmd('terminal ' .. term_cmd)
 	local buf = vim.api.nvim_get_current_buf()
 
 	local function on_fzf_exit()
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		
+		vim.api.nvim_buf_delete(buf, { force = true })
+		print("3")
+
 		if vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
 		end
 
 		for i = #lines, 1, -1 do
 			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-			if line ~= "" and vim.fn.filereadable(line) == 1 then
-				vim.schedule(function()
-					vim.cmd('edit ' .. vim.fn.fnameescape(line))
-				end)
-				break
-			end
+			print(line)
+            local buf_num = line:match("(%d+)")
+            if buf_num then
+                vim.schedule(function()
+                    vim.cmd('buffer ' .. buf_num)
+                end)
+            end
 		end
 	end
 
@@ -218,7 +217,6 @@ end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>sa', function()
 	local width  = math.floor(vim.o.columns * 0.8)
 	local height = math.floor(vim.o.lines    * 0.8)
-	
 	local win_cfg = {
 		relative = 'editor',
 		width    = width,
@@ -234,7 +232,7 @@ vim.keymap.set('n', '<leader>sa', function()
 	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
 	vim.cmd('terminal ' .. fzf_cmd)
 	local buf = vim.api.nvim_get_current_buf()
-	vim.api.nvim_buf_set_option(0, 'filetype', 'lua')
+	--vim.api.nvim_buf_set_option(0, 'filetype', 'lua')
 
 	local function on_fzf_exit()
 		if vim.api.nvim_win_is_valid(win) then

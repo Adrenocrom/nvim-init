@@ -83,7 +83,6 @@ vim.pack.add({
 	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
 	{ src = "https://github.com/hrsh7th/cmp-path" },
 	{ src = "https://github.com/hrsh7th/cmp-buffer" },
-	--{ src = "https://github.com/sudo-tee/opencode.nvim" },
 	{ src = "https://github.com/David-Kunz/gen.nvim" },
 	{ src = "https://github.com/milanglacier/minuet-ai.nvim" },
 	{ src = "https://github.com/mbbill/undotree" },
@@ -95,161 +94,127 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-neotest/nvim-nio" },
 	{ src = "https://github.com/mfussenegger/nvim-dap" },
 	{ src = "https://github.com/mfussenegger/nvim-jdtls" },
+	{ src = "https://github.com/Adrenocrom/sven.nvim" },
 })
 
-vim.keymap.set('n', '<leader>sf', function()
-	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
-	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
-	local win_cfg = {
-		relative = 'editor',
-		width    = width,
-		height   = height,
-		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
-		style    = 'minimal',
-		border   = 'rounded',
-	}
+--vim.keymap.set('n', '<leader>sf', function()
+--	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
+--	local width  = math.floor(vim.o.columns * 0.8)
+--	local height = math.floor(vim.o.lines    * 0.8)
+--	local win_cfg = {
+--		relative = 'editor',
+--		width    = width,
+--		height   = height,
+--		col      = math.floor((vim.o.columns - width)  / 2),
+--		row      = math.floor((vim.o.lines    - height) / 2),
+--		style    = 'minimal',
+--		border   = 'rounded',
+--	}
+--
+--	local temp_buf = vim.api.nvim_create_buf(false, true)
+--	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
+--	vim.cmd('terminal ' .. fzf_cmd)
+--	local buf = vim.api.nvim_get_current_buf()
+--
+--	local function on_fzf_exit()
+--		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+--		vim.api.nvim_buf_delete(buf, { force = true })
+--
+--		if vim.api.nvim_win_is_valid(win) then
+--			vim.api.nvim_win_close(win, true)
+--		end
+--
+--		for i = #lines, 1, -1 do
+--			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+--			if line ~= "" and vim.fn.filereadable(line) == 1 then
+--				vim.schedule(function()
+--					vim.cmd('edit ' .. vim.fn.fnameescape(line))
+--				end)
+--				break
+--			end
+--		end
+--	end
+--
+--	vim.api.nvim_create_autocmd('TermClose', {
+--		buffer = buf,
+--		callback = function()
+--			vim.schedule(on_fzf_exit)
+--		end
+--	})
+--
+--	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+--	vim.cmd('startinsert')
+--end, { noremap = true, silent = true })
+--
+--vim.keymap.set('n', '<leader><leader>', function()
+--	local width  = math.floor(vim.o.columns * 0.8)
+--	local height = math.floor(vim.o.lines    * 0.8)
+--	local win_cfg = {
+--		relative = 'editor',
+--		width    = width,
+--		height   = height,
+--		col      = math.floor((vim.o.columns - width)  / 2),
+--		row      = math.floor((vim.o.lines    - height) / 2),
+--		style    = 'minimal',
+--		border   = 'rounded',
+--	}
+--
+--
+--	local bufnrs = vim.api.nvim_list_bufs()
+--	local buffer_lines = {}
+--	for _, bufnr in ipairs(bufnrs) do
+--		if vim.api.nvim_buf_is_loaded(bufnr) then
+--			local name = vim.api.nvim_buf_get_name(bufnr)
+--			if name ~= '' and vim.fn.filereadable(name) == 1 then
+--				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
+--			end
+--		end
+--	end
+--
+--	local input_text = table.concat(buffer_lines, '\\n')
+--	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
+--
+--	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
+--	print(term_cmd)
+--	local term_buf = vim.api.nvim_create_buf(false, true)
+--
+--	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
+--	vim.cmd('terminal ' .. term_cmd)
+--	local buf = vim.api.nvim_get_current_buf()
+--
+--	local function on_fzf_exit()
+--		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+--		vim.api.nvim_buf_delete(buf, { force = true })
+--		print("3")
+--
+--		if vim.api.nvim_win_is_valid(win) then
+--			vim.api.nvim_win_close(win, true)
+--		end
+--
+--		for i = #lines, 1, -1 do
+--			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+--			print(line)
+--            local buf_num = line:match("(%d+)")
+--            if buf_num then
+--                vim.schedule(function()
+--                    vim.cmd('buffer ' .. buf_num)
+--                end)
+--            end
+--		end
+--	end
+--
+--	vim.api.nvim_create_autocmd('TermClose', {
+--		buffer = buf,
+--		callback = function()
+--			vim.schedule(on_fzf_exit)
+--		end
+--	})
+--
+--	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+--	vim.cmd('startinsert')
+--end, { noremap = true, silent = true })
 
-	local temp_buf = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
-	vim.cmd('terminal ' .. fzf_cmd)
-	local buf = vim.api.nvim_get_current_buf()
-
-	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		vim.api.nvim_buf_delete(buf, { force = true })
-
-		if vim.api.nvim_win_is_valid(win) then
-			vim.api.nvim_win_close(win, true)
-		end
-
-		for i = #lines, 1, -1 do
-			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-			if line ~= "" and vim.fn.filereadable(line) == 1 then
-				vim.schedule(function()
-					vim.cmd('edit ' .. vim.fn.fnameescape(line))
-				end)
-				break
-			end
-		end
-	end
-
-	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
-		callback = function()
-			vim.schedule(on_fzf_exit)
-		end
-	})
-
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
-	vim.cmd('startinsert')
-end, { noremap = true, silent = true })
-
-vim.keymap.set('n', '<leader><leader>', function()
-	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
-	local win_cfg = {
-		relative = 'editor',
-		width    = width,
-		height   = height,
-		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
-		style    = 'minimal',
-		border   = 'rounded',
-	}
-
-
-	local bufnrs = vim.api.nvim_list_bufs()
-	local buffer_lines = {}
-	for _, bufnr in ipairs(bufnrs) do
-		if vim.api.nvim_buf_is_loaded(bufnr) then
-			local name = vim.api.nvim_buf_get_name(bufnr)
-			if name ~= '' and vim.fn.filereadable(name) == 1 then
-				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
-			end
-		end
-	end
-
-	local input_text = table.concat(buffer_lines, '\\n')
-	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
-
-	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
-	print(term_cmd)
-	local term_buf = vim.api.nvim_create_buf(false, true)
-
-	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
-	vim.cmd('terminal ' .. term_cmd)
-	local buf = vim.api.nvim_get_current_buf()
-
-	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		vim.api.nvim_buf_delete(buf, { force = true })
-		print("3")
-
-		if vim.api.nvim_win_is_valid(win) then
-			vim.api.nvim_win_close(win, true)
-		end
-
-		for i = #lines, 1, -1 do
-			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-			print(line)
-            local buf_num = line:match("(%d+)")
-            if buf_num then
-                vim.schedule(function()
-                    vim.cmd('buffer ' .. buf_num)
-                end)
-            end
-		end
-	end
-
-	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
-		callback = function()
-			vim.schedule(on_fzf_exit)
-		end
-	})
-
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
-	vim.cmd('startinsert')
-end, { noremap = true, silent = true })
-
-vim.keymap.set('n', '<leader>sa', function()
-	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
-	local win_cfg = {
-		relative = 'editor',
-		width    = width,
-		height   = height,
-		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
-		style    = 'minimal',
-		border   = 'rounded',
-	}
-
-	local fzf_cmd = 'sven'
-	local temp_buf = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
-	vim.cmd('terminal ' .. fzf_cmd)
-	local buf = vim.api.nvim_get_current_buf()
-	--vim.api.nvim_buf_set_option(0, 'filetype', 'lua')
-
-	local function on_fzf_exit()
-		if vim.api.nvim_win_is_valid(win) then
-			vim.api.nvim_win_close(win, true)
-		end
-	end
-
-	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
-		callback = function()
-			vim.schedule(on_fzf_exit)
-		end
-	})
-
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
-	vim.cmd('startinsert')
-end, { noremap = true, silent = true })
+require('sven').setup()
 
 require('telescope').setup {
 	defaults = {
@@ -275,14 +240,14 @@ pcall(require('telescope').load_extension, 'ui-select')
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S] Find [H]elp' })
 vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S] Find [K]eymaps' })
---vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
+vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
 vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S] Find [S]elect Telescope' })
 vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S] Find current [W]ord' })
 vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S] Find by [G]rep' })
 vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S] Find [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S] Find [R]esume' })
 vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S] Find Recent Files ("." for repeat)' })
---vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
 
 vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", { desc = "[G] Git [B]lame"})
@@ -355,42 +320,6 @@ cmp.setup {
 		}
 	},
 }
-
---require("opencode").setup({
---	ui = {
---		position = "left",
---	},
---	context = {
---		enabled = true,
---		cursor_data = {
---			enabled = true,
---			context_lines = 5,
---		},
---		diagnostics = {
---			info = false,
---			warn = true,
---			error = true,
---			only_closest = false,
---		},
---		current_file = {
---			enabled = true,
---			show_full_path = true,
---		},
---		files = {
---			enabled = true,
---			show_full_path = true,
---		},
---		selection = {
---			enabled = true,
---		},
---		buffer = {
---			enabled = true,
---		},
---		git_diff = {
---			enabled = true,
---		},
---	},
---})
 
 require('gen').setup({
 	model = "gpt-oss:20b",

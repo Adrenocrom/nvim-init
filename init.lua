@@ -216,6 +216,9 @@ vim.pack.add({
 
 require('sven').setup()
 
+vim.keymap.set('n', '<leader>a', vim.cmd.Sven, { desc = ' Ai agent' })
+vim.keymap.set('v', '<leader>a', ":'<,'>Sven<cr>", { desc = ' Ai agent' })
+
 require('telescope').setup {
 	defaults = {
 		--prompt_prefix = " ",
@@ -340,8 +343,8 @@ require('gen').prompts['Shorter_Code'] = {
 	extract = "```$filetype\n(.-)```"
 }
 
-vim.keymap.set('n', '<leader>a', vim.cmd.Gen, { desc = ' Ai agent' })
-vim.keymap.set('v', '<leader>a', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
+vim.keymap.set('n', '<leader>sa', vim.cmd.Gen, { desc = ' Ai agent' })
+vim.keymap.set('v', '<leader>sa', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
 vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
 
 require('minuet').setup {

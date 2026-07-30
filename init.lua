@@ -11,6 +11,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
+vim.o.swapfile = false
 
 vim.keymap.set('n', '<leader>lar', 'aLOG.info("\\033[31m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
 vim.keymap.set('n', '<leader>lag', 'aLOG.info("\\033[32m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})

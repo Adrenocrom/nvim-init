@@ -51,9 +51,6 @@ vim.cmd.hi 'FoldColumn guibg=NONE ctermbg=NONE'
 local hooks = function(ev)
 	local name, kind = ev.data.spec.name, ev.data.kind
 	print(name)
-	if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
-		vim.system({ 'make' }, { cwd = ev.data.path })
-	end
 	if name == 'LuaSnip' and (kind == 'install' or kind == 'update') then
 		vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path })
 	end
@@ -64,10 +61,6 @@ vim.pack.add({
 	{ src = "https://github.com/Raimondi/delimitMate" },
 	{ src = "https://github.com/mattn/emmet-vim" },
 	{ src = "https://github.com/tpope/vim-surround" },
-	{ src = "https://github.com/nvim-lua/plenary.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
 	{ src = "https://github.com/echasnovski/mini.icons" },
 	{ src = "https://github.com/folke/which-key.nvim" },
 	{ src = "https://github.com/folke/trouble.nvim" },
@@ -83,7 +76,6 @@ vim.pack.add({
 	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
 	{ src = "https://github.com/hrsh7th/cmp-path" },
 	{ src = "https://github.com/hrsh7th/cmp-buffer" },
-	{ src = "https://github.com/David-Kunz/gen.nvim" },
 	{ src = "https://github.com/milanglacier/minuet-ai.nvim" },
 	{ src = "https://github.com/mbbill/undotree" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -97,160 +89,128 @@ vim.pack.add({
 	{ src = "https://github.com/Adrenocrom/sven.nvim" },
 })
 
---vim.keymap.set('n', '<leader>sf', function()
---	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
---	local width  = math.floor(vim.o.columns * 0.8)
---	local height = math.floor(vim.o.lines    * 0.8)
---	local win_cfg = {
---		relative = 'editor',
---		width    = width,
---		height   = height,
---		col      = math.floor((vim.o.columns - width)  / 2),
---		row      = math.floor((vim.o.lines    - height) / 2),
---		style    = 'minimal',
---		border   = 'rounded',
---	}
---
---	local temp_buf = vim.api.nvim_create_buf(false, true)
---	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
---	vim.cmd('terminal ' .. fzf_cmd)
---	local buf = vim.api.nvim_get_current_buf()
---
---	local function on_fzf_exit()
---		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
---		vim.api.nvim_buf_delete(buf, { force = true })
---
---		if vim.api.nvim_win_is_valid(win) then
---			vim.api.nvim_win_close(win, true)
---		end
---
---		for i = #lines, 1, -1 do
---			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
---			if line ~= "" and vim.fn.filereadable(line) == 1 then
---				vim.schedule(function()
---					vim.cmd('edit ' .. vim.fn.fnameescape(line))
---				end)
---				break
---			end
---		end
---	end
---
---	vim.api.nvim_create_autocmd('TermClose', {
---		buffer = buf,
---		callback = function()
---			vim.schedule(on_fzf_exit)
---		end
---	})
---
---	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
---	vim.cmd('startinsert')
---end, { noremap = true, silent = true })
---
---vim.keymap.set('n', '<leader><leader>', function()
---	local width  = math.floor(vim.o.columns * 0.8)
---	local height = math.floor(vim.o.lines    * 0.8)
---	local win_cfg = {
---		relative = 'editor',
---		width    = width,
---		height   = height,
---		col      = math.floor((vim.o.columns - width)  / 2),
---		row      = math.floor((vim.o.lines    - height) / 2),
---		style    = 'minimal',
---		border   = 'rounded',
---	}
---
---
---	local bufnrs = vim.api.nvim_list_bufs()
---	local buffer_lines = {}
---	for _, bufnr in ipairs(bufnrs) do
---		if vim.api.nvim_buf_is_loaded(bufnr) then
---			local name = vim.api.nvim_buf_get_name(bufnr)
---			if name ~= '' and vim.fn.filereadable(name) == 1 then
---				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
---			end
---		end
---	end
---
---	local input_text = table.concat(buffer_lines, '\\n')
---	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
---
---	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
---	print(term_cmd)
---	local term_buf = vim.api.nvim_create_buf(false, true)
---
---	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
---	vim.cmd('terminal ' .. term_cmd)
---	local buf = vim.api.nvim_get_current_buf()
---
---	local function on_fzf_exit()
---		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
---		vim.api.nvim_buf_delete(buf, { force = true })
---		print("3")
---
---		if vim.api.nvim_win_is_valid(win) then
---			vim.api.nvim_win_close(win, true)
---		end
---
---		for i = #lines, 1, -1 do
---			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
---			print(line)
---            local buf_num = line:match("(%d+)")
---            if buf_num then
---                vim.schedule(function()
---                    vim.cmd('buffer ' .. buf_num)
---                end)
---            end
---		end
---	end
---
---	vim.api.nvim_create_autocmd('TermClose', {
---		buffer = buf,
---		callback = function()
---			vim.schedule(on_fzf_exit)
---		end
---	})
---
---	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
---	vim.cmd('startinsert')
---end, { noremap = true, silent = true })
+--- BEGINOFNEEDONPLUGIN ---
+vim.keymap.set('n', '<leader>sf', function()
+	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
+	local width  = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines    * 0.8)
+	local win_cfg = {
+		relative = 'editor',
+		width    = width,
+		height   = height,
+		col      = math.floor((vim.o.columns - width)  / 2),
+		row      = math.floor((vim.o.lines    - height) / 2),
+		style    = 'minimal',
+		border   = 'rounded',
+	}
+
+	local temp_buf = vim.api.nvim_create_buf(false, true)
+	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
+	vim.cmd('terminal ' .. fzf_cmd)
+	local buf = vim.api.nvim_get_current_buf()
+
+	local function on_fzf_exit()
+		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+		vim.api.nvim_buf_delete(buf, { force = true })
+
+		if vim.api.nvim_win_is_valid(win) then
+			vim.api.nvim_win_close(win, true)
+		end
+
+		for i = #lines, 1, -1 do
+			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+			if line ~= "" and vim.fn.filereadable(line) == 1 then
+				vim.schedule(function()
+					vim.cmd('edit ' .. vim.fn.fnameescape(line))
+				end)
+				break
+			end
+		end
+	end
+
+	vim.api.nvim_create_autocmd('TermClose', {
+		buffer = buf,
+		callback = function()
+			vim.schedule(on_fzf_exit)
+		end
+	})
+
+	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+	vim.cmd('startinsert')
+end, { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader><leader>', function()
+	local width  = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines    * 0.8)
+	local win_cfg = {
+		relative = 'editor',
+		width    = width,
+		height   = height,
+		col      = math.floor((vim.o.columns - width)  / 2),
+		row      = math.floor((vim.o.lines    - height) / 2),
+		style    = 'minimal',
+		border   = 'rounded',
+	}
+
+
+	local bufnrs = vim.api.nvim_list_bufs()
+	local buffer_lines = {}
+	for _, bufnr in ipairs(bufnrs) do
+		if vim.api.nvim_buf_is_loaded(bufnr) then
+			local name = vim.api.nvim_buf_get_name(bufnr)
+			if name ~= '' and vim.fn.filereadable(name) == 1 then
+				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
+			end
+		end
+	end
+
+	local input_text = table.concat(buffer_lines, '\\n')
+	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
+
+	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
+	print(term_cmd)
+	local term_buf = vim.api.nvim_create_buf(false, true)
+
+	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
+	vim.cmd('terminal ' .. term_cmd)
+	local buf = vim.api.nvim_get_current_buf()
+
+	local function on_fzf_exit()
+		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+		vim.api.nvim_buf_delete(buf, { force = true })
+		print("3")
+
+		if vim.api.nvim_win_is_valid(win) then
+			vim.api.nvim_win_close(win, true)
+		end
+
+		for i = #lines, 1, -1 do
+			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+			print(line)
+            local buf_num = line:match("(%d+)")
+            if buf_num then
+                vim.schedule(function()
+                    vim.cmd('buffer ' .. buf_num)
+                end)
+            end
+		end
+	end
+
+	vim.api.nvim_create_autocmd('TermClose', {
+		buffer = buf,
+		callback = function()
+			vim.schedule(on_fzf_exit)
+		end
+	})
+
+	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+	vim.cmd('startinsert')
+end, { noremap = true, silent = true })
+--- ENDOFNEEDONPLUGIN ---
 
 require('sven').setup()
 vim.keymap.set('n', '<leader>a', vim.cmd.Sven, { desc = ' Ai agent' })
 vim.keymap.set('v', '<leader>a', ":'<,'>Sven<cr>", { desc = ' Ai agent' })
-
-require('telescope').setup {
-	defaults = {
-		--prompt_prefix = " ",
-		--selection_caret = " ",
-		path_display = { "smart" },
-		dynamic_preview_title = true,
-		sorting_strategy = "ascending",
-		layout_strategy = "vertical",
-		layout_config = {
-			prompt_position = "bottom",
-			height = 0.95,
-		},
-	},
-	extensions = {
-		require("telescope.themes").get_dropdown()
-	}
-}
-
-pcall(require('telescope').load_extension, 'fzf')
-pcall(require('telescope').load_extension, 'ui-select')
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S] Find [H]elp' })
-vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S] Find [K]eymaps' })
-vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S] Find [F]iles' })
-vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S] Find [S]elect Telescope' })
-vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S] Find current [W]ord' })
-vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S] Find by [G]rep' })
-vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S] Find [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S] Find [R]esume' })
-vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S] Find Recent Files ("." for repeat)' })
-vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
 
 vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", { desc = "[G] Git [B]lame"})
 vim.api.nvim_set_keymap("n", "<F8>", ":Tagbar<CR>", {})
@@ -323,29 +283,6 @@ cmp.setup {
 	},
 }
 
-require('gen').setup({
-	model = "gpt-oss:20b",
-	display_mode = "vertical-split",
-	show_prompt = true,
-	show_model = true,
-	no_auto_close = true
-})
-
-require('gen').prompts['Fix_Code'] = {
-	prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
-	replace = true,
-	extract = "```$filetype\n(.-)```"
-}
-require('gen').prompts['Shorter_Code'] = {
-	prompt = "Rewrite the code as short as possible. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
-	replace = true,
-	extract = "```$filetype\n(.-)```"
-}
-
-vim.keymap.set('n', '<leader>sa', vim.cmd.Gen, { desc = ' Ai agent' })
-vim.keymap.set('v', '<leader>sa', ":'<,'>Gen<cr>", { desc = ' Ai agent' })
-vim.keymap.set('n', '<leader>cm', require('gen').select_model, { desc = ' Ai change model' })
-
 require('minuet').setup {
 	cmp = {
 		enable_auto_complete = true,
@@ -416,12 +353,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 			vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
 		end
 
-		--map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-		--map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-		--map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-		--map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-		--map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-		--map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 		map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 		map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
 		map('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')

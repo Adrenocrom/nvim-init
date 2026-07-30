@@ -169,7 +169,6 @@ vim.keymap.set('n', '<leader><leader>', function()
 	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
 
 	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
-	print(term_cmd)
 	local term_buf = vim.api.nvim_create_buf(false, true)
 
 	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
@@ -179,7 +178,6 @@ vim.keymap.set('n', '<leader><leader>', function()
 	local function on_fzf_exit()
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 		vim.api.nvim_buf_delete(buf, { force = true })
-		print("3")
 
 		if vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
@@ -187,7 +185,6 @@ vim.keymap.set('n', '<leader><leader>', function()
 
 		for i = #lines, 1, -1 do
 			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-			print(line)
             local buf_num = line:match("(%d+)")
             if buf_num then
                 vim.schedule(function()

@@ -92,7 +92,7 @@ vim.pack.add({
 
 --- BEGINOFNEEDONPLUGIN ---
 vim.keymap.set('n', '<leader>sf', function()
-	local fzf_cmd = 'find . -type f 2>/dev/null | fzf'
+	local fzf_cmd = 'find . -type f -not -path "*/.git/*" -not -path "*/target/*" 2>/dev/null | fzf'
 	local width  = math.floor(vim.o.columns * 0.8)
 	local height = math.floor(vim.o.lines    * 0.8)
 	local win_cfg = {

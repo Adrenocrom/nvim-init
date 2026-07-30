@@ -215,7 +215,6 @@ vim.pack.add({
 --end, { noremap = true, silent = true })
 
 require('sven').setup()
-
 vim.keymap.set('n', '<leader>a', vim.cmd.Sven, { desc = ' Ai agent' })
 vim.keymap.set('v', '<leader>a', ":'<,'>Sven<cr>", { desc = ' Ai agent' })
 
@@ -417,12 +416,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
 			vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
 		end
 
-		map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-		map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-		map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-		map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-		map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-		map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+		--map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+		--map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+		--map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+		--map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+		--map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+		--map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+		map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+		map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+		map('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+		map('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+		map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
+		map('<leader>ws', vim.lsp.buf.workspace_symbol, '[W]orkspace [S]ymbols')
 		map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 		map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 		map('<leader>k', vim.lsp.buf.hover, 'Hover Documentation')

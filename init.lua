@@ -94,13 +94,13 @@ vim.pack.add({
 vim.keymap.set('n', '<leader>sf', function()
 	local fzf_cmd = 'find . -type f -not -path "*/.git/*" -not -path "*/target/*" 2>/dev/null | fzf'
 	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
+	local height = math.floor(vim.o.lines   * 0.8)
 	local win_cfg = {
 		relative = 'editor',
 		width    = width,
 		height   = height,
 		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
+		row      = math.floor((vim.o.lines   - height) / 2),
 		style    = 'minimal',
 		border   = 'rounded',
 	}
@@ -142,13 +142,13 @@ end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader><leader>', function()
 	local width  = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines    * 0.8)
+	local height = math.floor(vim.o.lines   * 0.8)
 	local win_cfg = {
 		relative = 'editor',
 		width    = width,
 		height   = height,
 		col      = math.floor((vim.o.columns - width)  / 2),
-		row      = math.floor((vim.o.lines    - height) / 2),
+		row      = math.floor((vim.o.lines   - height) / 2),
 		style    = 'minimal',
 		border   = 'rounded',
 	}
@@ -167,10 +167,9 @@ vim.keymap.set('n', '<leader><leader>', function()
 
 	local input_text = table.concat(buffer_lines, '\\n')
 	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
-
 	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
-	local term_buf = vim.api.nvim_create_buf(false, true)
 
+	local term_buf = vim.api.nvim_create_buf(false, true)
 	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
 	vim.cmd('terminal ' .. term_cmd)
 	local buf = vim.api.nvim_get_current_buf()
@@ -190,6 +189,7 @@ vim.keymap.set('n', '<leader><leader>', function()
                 vim.schedule(function()
                     vim.cmd('buffer ' .. buf_num)
                 end)
+				break
             end
 		end
 	end

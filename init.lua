@@ -108,11 +108,10 @@ vim.keymap.set('n', '<leader>sf', function()
 	local temp_buf = vim.api.nvim_create_buf(false, true)
 	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
 	vim.cmd('terminal ' .. fzf_cmd)
-	local buf = vim.api.nvim_get_current_buf()
 
 	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		vim.api.nvim_buf_delete(buf, { force = true })
+		local lines = vim.api.nvim_buf_get_lines(temp_buf, 0, -1, false)
+		vim.api.nvim_buf_delete(temp_buf, { force = true })
 
 		if vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
@@ -130,13 +129,13 @@ vim.keymap.set('n', '<leader>sf', function()
 	end
 
 	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
+		buffer = temp_buf,
 		callback = function()
 			vim.schedule(on_fzf_exit)
 		end
 	})
 
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+	vim.api.nvim_buf_set_keymap(temp_buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
 	vim.cmd('startinsert')
 end, { noremap = true, silent = true })
 
@@ -153,7 +152,6 @@ vim.keymap.set('n', '<leader><leader>', function()
 		border   = 'rounded',
 	}
 
-
 	local bufnrs = vim.api.nvim_list_bufs()
 	local buffer_lines = {}
 	for _, bufnr in ipairs(bufnrs) do
@@ -166,17 +164,16 @@ vim.keymap.set('n', '<leader><leader>', function()
 	end
 
 	local input_text = table.concat(buffer_lines, '\\n')
-	local safe_input = input_text:gsub("'", "'\\''")  -- Escape single quotes properly
+	local safe_input = input_text:gsub("'", "'\\''")
 	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
 
-	local term_buf = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(term_buf, true, win_cfg)
+	local temp_buf = vim.api.nvim_create_buf(false, true)
+	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
 	vim.cmd('terminal ' .. term_cmd)
-	local buf = vim.api.nvim_get_current_buf()
 
 	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		vim.api.nvim_buf_delete(buf, { force = true })
+		local lines = vim.api.nvim_buf_get_lines(temp_buf, 0, -1, false)
+		vim.api.nvim_buf_delete(temp_buf, { force = true })
 
 		if vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
@@ -195,13 +192,13 @@ vim.keymap.set('n', '<leader><leader>', function()
 	end
 
 	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = buf,
+		buffer = temp_buf,
 		callback = function()
 			vim.schedule(on_fzf_exit)
 		end
 	})
 
-	vim.api.nvim_buf_set_keymap(buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
+	vim.api.nvim_buf_set_keymap(temp_buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
 	vim.cmd('startinsert')
 end, { noremap = true, silent = true })
 --- ENDOFNEEDONPLUGIN ---

@@ -135,7 +135,6 @@ vim.keymap.set('n', '<leader>sf', function()
 		end
 	})
 
-	vim.api.nvim_buf_set_keymap(temp_buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
 	vim.cmd('startinsert')
 end, { noremap = true, silent = true })
 
@@ -198,7 +197,6 @@ vim.keymap.set('n', '<leader><leader>', function()
 		end
 	})
 
-	vim.api.nvim_buf_set_keymap(temp_buf, 't', '<Esc>', '<C-\\><C-n><C-w>c', { noremap = true, silent = true })
 	vim.cmd('startinsert')
 end, { noremap = true, silent = true })
 --- ENDOFNEEDONPLUGIN ---

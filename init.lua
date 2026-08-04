@@ -157,45 +157,54 @@ vim.keymap.set('n', '<leader><leader>', function()
 		if vim.api.nvim_buf_is_loaded(bufnr) then
 			local name = vim.api.nvim_buf_get_name(bufnr)
 			if name ~= '' and vim.fn.filereadable(name) == 1 then
+				--local display_name = #name > 100 and "…" .. name:sub(-99) or name
+				--table.insert(buffer_lines, string.format("%d %s", bufnr, display_name))
 				table.insert(buffer_lines, string.format("%d %s", bufnr, name))
 			end
 		end
 	end
 
-	local input_text = table.concat(buffer_lines, '\\n')
-	local safe_input = input_text:gsub("'", "'\\''")
-	local term_cmd = "echo -e '" .. safe_input .. "' | fzf"
+	-- Create a named pipe (FIFO) instead of a temp file.
+	local fifo = vim.fn.tempname()
+	vim.fn.system({ 'mkfifo', fifo })
 
 	local temp_buf = vim.api.nvim_create_buf(false, true)
+	vim.bo[temp_buf].bufhidden = 'wipe'
+
 	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
-	vim.cmd('terminal ' .. term_cmd)
 
-	local function on_fzf_exit()
-		local lines = vim.api.nvim_buf_get_lines(temp_buf, 0, -1, false)
-		vim.api.nvim_buf_delete(temp_buf, { force = true })
+	local job_id = vim.fn.termopen(string.format('fzf < %s', vim.fn.fnameescape(fifo)), {
+		on_exit = function(_, _, _)
+			vim.schedule(function()
+				local lines = vim.api.nvim_buf_get_lines(temp_buf, 0, -1, false)
 
-		if vim.api.nvim_win_is_valid(win) then
-			vim.api.nvim_win_close(win, true)
-		end
+				if vim.api.nvim_win_is_valid(win) then
+					vim.api.nvim_win_close(win, true)
+				end
 
-		for i = #lines, 1, -1 do
-			local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
-            local buf_num = line:match("(%d+)")
-            if buf_num then
-                vim.schedule(function()
-                    vim.cmd('buffer ' .. buf_num)
-                end)
-				break
-            end
-		end
-	end
+				-- Clean up FIFO.
+				vim.fn.delete(fifo)
 
-	vim.api.nvim_create_autocmd('TermClose', {
-		buffer = temp_buf,
-		callback = function()
-			vim.schedule(on_fzf_exit)
-		end
+				for i = #lines, 1, -1 do
+					local line = lines[i]:gsub("^%s+", ""):gsub("%s+$", "")
+					local buf_num = line:match("(%d+)")
+					if buf_num then
+						vim.cmd('buffer ' .. buf_num)
+						break
+					end
+				end
+			end)
+		end,
 	})
+
+	-- Defer writing so fzf has time to open the FIFO for reading.
+	vim.defer_fn(function()
+		local f = io.open(fifo, "w")
+		if f then
+			f:write(table.concat(buffer_lines, "\n") .. "\n")
+			f:close()
+		end
+	end, 50)
 
 	vim.cmd('startinsert')
 end, { noremap = true, silent = true })

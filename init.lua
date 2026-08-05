@@ -41,7 +41,8 @@ vim.cmd([[
 	vnoremap > >gv
 ]])
 
-vim.cmd.colorscheme("vim")
+--vim.cmd.colorscheme("vim")
+vim.cmd.colorscheme("catppuccin")
 vim.cmd.hi 'Comment gui=none'
 vim.cmd.hi 'Normal guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'
@@ -49,15 +50,6 @@ vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'Pmenu guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'FoldColumn guibg=NONE ctermbg=NONE'
 
-local hooks = function(ev)
-	local name, kind = ev.data.spec.name, ev.data.kind
-	print(name)
-	if name == 'LuaSnip' and (kind == 'install' or kind == 'update') then
-		vim.system({ 'make', 'install_jsregexp' }, { cwd = ev.data.path })
-	end
-end
-
-vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 vim.pack.add({
 	{ src = "https://github.com/Raimondi/delimitMate" },
 	{ src = "https://github.com/mattn/emmet-vim" },
@@ -66,17 +58,7 @@ vim.pack.add({
 	{ src = "https://github.com/folke/which-key.nvim" },
 	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
-	{ src = "https://github.com/tpope/vim-dadbod" },
-	{ src = "https://github.com/kristijanhusak/vim-dadbod-ui" },
 	{ src = "https://github.com/majutsushi/tagbar" },
-	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
-	{ src = "https://github.com/nvim-tree/nvim-tree.lua" },
-	{ src = "https://github.com/L3MON4D3/LuaSnip" },
-	{ src = "https://github.com/hrsh7th/nvim-cmp" },
-	{ src = "https://github.com/saadparwaiz1/cmp_luasnip" },
-	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
-	{ src = "https://github.com/hrsh7th/cmp-path" },
-	{ src = "https://github.com/hrsh7th/cmp-buffer" },
 	{ src = "https://github.com/milanglacier/minuet-ai.nvim" },
 	{ src = "https://github.com/mbbill/undotree" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -217,77 +199,14 @@ vim.keymap.set('v', '<leader>a', ":'<,'>Sven<cr>", { desc = ' Ai agent' })
 vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", { desc = "[G] Git [B]lame"})
 vim.api.nvim_set_keymap("n", "<F8>", ":Tagbar<CR>", {})
 
-require("nvim-tree").setup({
-	update_focused_file = {
-		enable = true
-	},
-	renderer = {
-		group_empty = true
-	}
-})
-
-vim.keymap.set("n", "<leader>t", vim.cmd.NvimTreeToggle, { desc = "[t]oggle nvimtree" })
-vim.keymap.set("n", "<leader>tr", vim.cmd.NvimTreeRefresh, { desc = "[t]ree [r]refresn nvimtree" })
-
-local cmp = require("cmp")
-local luasnip = require 'luasnip'
-luasnip.config.setup {}
-
-cmp.setup {
-	nippet = {
-		expand = function(args)
-			luasnip.lsp_expand(args.body)
-		end,
-	},
-	window = {
-		completion = cmp.config.window.bordered(),
-		documentation = cmp.config.window.bordered()
-	},
-	completion = { completeopt = 'menu,menuone,noinsert' },
-	mapping = cmp.mapping.preset.insert {
-		['<CR>'] = cmp.mapping.confirm { select = true },
-		['<Tab>'] = cmp.mapping.select_next_item(),
-		['<S-Tab>'] = cmp.mapping.select_prev_item(),
-		['<C-Space>'] = cmp.mapping.complete {},
-		['<C-L>'] = cmp.mapping(function()
-			if luasnip.expand_or_locally_jumpable() then
-				luasnip.expand_or_jump()
-			end
-		end, { 'i', 's' }),
-		['<C-h>'] = cmp.mapping(function()
-			if luasnip.locally_jumpable(-1) then
-				luasnip.jump(-1)
-			end
-		end, { 'i', 's' }),
-	},
-	sources = {
-		{
-			name = 'nvim_lsp',
-			group_index = 1
-		},
-		{
-			name = 'luasnip',
-			group_index = 1
-		},
-		{
-			name = 'buffer',
-			group_index = 2,
-			option = {
-				get_bufnrs = function ()
-					return vim.api.nvim_list_bufs()
-				end
-			}
-		},
-		{
-			name = 'path',
-			group_index = 2
-		}
-	},
-}
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize = 25
+vim.g.netrw_browse_split = 0
+vim.keymap.set("n", "<leader>t", ":Lexplore<CR>", { desc = "[t]oggle nvimtree" })
 
 require('minuet').setup {
 	cmp = {
-		enable_auto_complete = true,
+		enable_auto_complete = false,
 	},
 	blink = {
 		enable_auto_complete = false,
@@ -351,21 +270,22 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
 	callback = function(event)
-		local map = function(keys, func, desc)
-			vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+		local client = vim.lsp.get_client_by_id(event.data.client_id)
+		if client ~= nil and client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
 		end
+		vim.cmd("set completeopt+=noselect")
 
-		map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-		map('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-		map('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-		map('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-		map('<leader>ds', vim.lsp.buf.document_symbol, '[D]ocument [S]ymbols')
-		map('<leader>ws', vim.lsp.buf.workspace_symbol, '[W]orkspace [S]ymbols')
-		map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-		map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-		map('<leader>k', vim.lsp.buf.hover, 'Hover Documentation')
-		map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
+		vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = event.buf, desc = 'LSP: [G]oto [D]efinition' })
+		vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = event.buf, desc = 'LSP: [G]oto [R]eferences' })
+		vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, { buffer = event.buf, desc = 'LSP: [G]oto [I]mplementation' })
+		vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, { buffer = event.buf, desc = 'LSP: Type [D]efinition' })
+		vim.keymap.set('n', '<leader>ds', vim.lsp.buf.document_symbol, { buffer = event.buf, desc = 'LSP: [D]ocument [S]ymbols' })
+		vim.keymap.set('n', '<leader>ws', vim.lsp.buf.workspace_symbol, { buffer = event.buf, desc = 'LSP: [W]orkspace [S]ymbols' })
+		vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = event.buf, desc = 'LSP: [R]e[n]ame' })
+		vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = event.buf, desc = 'LSP: [C]ode [A]ction' })
+		vim.keymap.set('n', '<leader>k', vim.lsp.buf.hover, { buffer = event.buf, desc = 'LSP: Hover Documentation' })
+		vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = event.buf, desc = 'LSP: [G]oto [D]eclaration' })
 	end
 })
 

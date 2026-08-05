@@ -45,8 +45,8 @@ vim.cmd([[
 	vnoremap > >gv
 ]])
 
---vim.cmd.colorscheme("vim")
-vim.cmd.colorscheme("catppuccin")
+vim.cmd.colorscheme("vim")
+--vim.cmd.colorscheme("catppuccin")
 vim.cmd.hi 'Comment gui=none'
 vim.cmd.hi 'Normal guibg=NONE ctermbg=NONE'
 vim.cmd.hi 'SignColumn guibg=NONE ctermbg=NONE'

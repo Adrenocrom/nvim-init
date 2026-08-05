@@ -35,6 +35,10 @@ vim.api.nvim_set_keymap('i', '<Left>', '<Nop>', { noremap = true, silent = true 
 vim.api.nvim_set_keymap('i', '<Right>', '<Nop>', { noremap = true, silent = true })
 
 vim.diagnostic.config({ virtual_text = true })
+vim.keymap.set("n", "<leader>xx", function ()
+	vim.diagnostic.setqflist()
+	vim.cmd("copen")
+end, { silent = true})
 
 vim.cmd([[
 	vnoremap < <gv
@@ -64,10 +68,7 @@ vim.pack.add({
 	{ src = "https://github.com/tpope/vim-surround" },
 	{ src = "https://github.com/echasnovski/mini.icons" },
 	{ src = "https://github.com/folke/which-key.nvim" },
-	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
-	{ src = "https://github.com/tpope/vim-dadbod" },
-	{ src = "https://github.com/kristijanhusak/vim-dadbod-ui" },
 	{ src = "https://github.com/majutsushi/tagbar" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://github.com/nvim-tree/nvim-tree.lua" },
@@ -472,11 +473,3 @@ vim.fn.sign_define('DapStopped', { text='', texthl='DapStopped', linehl='DapS
 dap.listeners.after.event_initialized['dapui_config'] = dapui.open
 dap.listeners.before.event_terminated['dapui_config'] = dapui.close
 dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
-require("trouble").setup({})
-vim.keymap.set('n', '<leader>xx', "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
-vim.keymap.set('n', "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer Diagnostics (Trouble)" })
-vim.keymap.set('n', "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = "Symbols (Trouble)" })
-vim.keymap.set('n', "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", { desc = "LSP Definitions / references / ... (Trouble)" })
-vim.keymap.set('n', "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "Location List (Trouble)" })
-vim.keymap.set('n', "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })

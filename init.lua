@@ -76,7 +76,7 @@ vim.pack.add({
 
 --- BEGINOFNEEDONPLUGIN ---
 vim.keymap.set('n', '<leader>sf', function()
-	local fzf_cmd = 'find . -type f -not -path "*/.git/*" -not -path "*/target/*" 2>/dev/null | fzf'
+	local fzf_cmd = 'find . -type f -not -path "*/.git/*" -not -path "*/target/*" 2>/dev/null | fzf --style=full'
 	local width  = math.floor(vim.o.columns * 0.8)
 	local height = math.floor(vim.o.lines   * 0.8)
 	local win_cfg = {
@@ -86,7 +86,7 @@ vim.keymap.set('n', '<leader>sf', function()
 		col      = math.floor((vim.o.columns - width)  / 2),
 		row      = math.floor((vim.o.lines   - height) / 2),
 		style    = 'minimal',
-		border   = 'rounded',
+		border   = 'shadow',
 	}
 
 	local temp_buf = vim.api.nvim_create_buf(false, true)
@@ -132,7 +132,7 @@ vim.keymap.set('n', '<leader><leader>', function()
 		col      = math.floor((vim.o.columns - width)  / 2),
 		row      = math.floor((vim.o.lines   - height) / 2),
 		style    = 'minimal',
-		border   = 'rounded',
+		border   = 'shadow',
 	}
 
 	local bufnrs = vim.api.nvim_list_bufs()
@@ -157,7 +157,7 @@ vim.keymap.set('n', '<leader><leader>', function()
 
 	local win = vim.api.nvim_open_win(temp_buf, true, win_cfg)
 
-	local job_id = vim.fn.termopen(string.format('fzf < %s', vim.fn.fnameescape(fifo)), {
+	local job_id = vim.fn.termopen(string.format('fzf --style=full < %s', vim.fn.fnameescape(fifo)), {
 		on_exit = function(_, _, _)
 			vim.schedule(function()
 				local lines = vim.api.nvim_buf_get_lines(temp_buf, 0, -1, false)

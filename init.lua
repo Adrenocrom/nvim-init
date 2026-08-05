@@ -207,6 +207,11 @@ vim.g.netrw_winsize = 10
 vim.g.netrw_browse_split = 0
 vim.g.netrw_altfile = 1
 vim.keymap.set("n", "<leader>t", ":Lexplore<CR>", { desc = "[t]oggle nvimtree" })
+vim.keymap.set("n", "<leader>p", function()
+	local relpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
+	vim.fn.setreg("+", relpath)  -- system clipboard
+	vim.fn.setreg('"', relpath)  -- unnamed register
+end, { desc = "[p] yank current buffer's relative path", silent = true })
 
 require('minuet').setup {
 	cmp = {

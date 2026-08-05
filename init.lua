@@ -58,7 +58,6 @@ vim.pack.add({
 	{ src = "https://github.com/Raimondi/delimitMate" },
 	{ src = "https://github.com/mattn/emmet-vim" },
 	{ src = "https://github.com/tpope/vim-surround" },
-	{ src = "https://github.com/echasnovski/mini.icons" },
 	{ src = "https://github.com/folke/which-key.nvim" },
 	{ src = "https://github.com/tpope/vim-fugitive" },
 	{ src = "https://github.com/majutsushi/tagbar" },

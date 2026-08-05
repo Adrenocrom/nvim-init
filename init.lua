@@ -202,8 +202,10 @@ vim.api.nvim_set_keymap("n", "<leader>gb", ":Git blame<CR>", { desc = "[G] Git [
 vim.api.nvim_set_keymap("n", "<F8>", ":Tagbar<CR>", {})
 
 vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 25
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 10
 vim.g.netrw_browse_split = 0
+vim.g.netrw_altfile = 1
 vim.keymap.set("n", "<leader>t", ":Lexplore<CR>", { desc = "[t]oggle nvimtree" })
 
 require('minuet').setup {

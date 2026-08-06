@@ -207,7 +207,8 @@ vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 10
 vim.g.netrw_browse_split = 0
 vim.g.netrw_altfile = 1
-vim.keymap.set("n", "<leader>t", ":Lexplore<CR>", { desc = "[t]oggle nvimtree" })
+vim.keymap.set("n", "<leader>t", ":Lexplore<CR>", { desc = "[t]oggle netrw" })
+vim.keymap.set("n", "<leader>tp", ":Lexplore %:h<CR>", { desc = "open ne[t]rw at buffers path" })
 vim.keymap.set("n", "<leader>p", function()
 	local relpath = vim.fn.fnamemodify(vim.fn.expand("%"), ":.")
 	vim.fn.setreg("+", relpath)  -- system clipboard

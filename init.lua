@@ -75,6 +75,35 @@ vim.pack.add({
 	{ src = "https://github.com/Adrenocrom/sven.nvim" },
 })
 
+
+vim.api.nvim_set_hl(0, "NonStandardCharHighlight", { underline = true, bold = true, fg = "#ff0000" })
+
+-- Define a unique autocommand group to avoid duplicate commands
+local augroup = vim.api.nvim_create_augroup("NonStandardCharsGroup", { clear = true })
+
+-- The regex [^\x00-\x7F] matches any character outside the 8-bit ASCII range.
+-- This includes emojis, accented letters (like é), and special symbols.
+local pattern = "[^\x20-\x7F|\t]"
+
+-- Apply highlights on buffer entry, text changes, or filetype switches.
+vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
+	group = augroup,
+	pattern = "*",
+	callback = function()
+		-- We use pcall to prevent the script from crashing if matchadd 
+		-- encounters a buffer it can't process (like some special system buffers).
+		pcall(function()
+			-- Only call matchadd if we haven't already applied it in this specific view.
+			-- Since our pattern is constant, one application per "view" is enough.
+			vim.fn.matchadd("NonStandardCharHighlight", pattern)
+		end)
+	end,
+})
+
+vim.api.nvim_create_user_command("RefreshMatch", function()
+    vim.fn.matchadd("NonStandardCharHighlight", pattern)
+end, {})
+
 --- BEGINOFNEEDONPLUGIN ---
 vim.keymap.set('n', '<leader>sf', function()
 	local fzf_cmd = 'find . -type f -not -path "*/.git/*" -not -path "*/target/*" 2>/dev/null | fzf --style=full'

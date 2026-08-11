@@ -13,6 +13,7 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 vim.o.swapfile = false
 vim.o.cmdheight = 0
+vim.o.completeopt = "menuone,noselect"
 
 vim.keymap.set('n', '<leader>lar', 'aLOG.info("\\033[31m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG red"})
 vim.keymap.set('n', '<leader>lag', 'aLOG.info("\\033[32m" +  + "\\033[0m");' .. string.rep('<left>', 14), { desc = "Insert LOG green"})
@@ -314,7 +315,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		if client ~= nil and client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
 		end
-		vim.cmd("set completeopt+=noselect")
 
 		vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = event.buf, desc = 'LSP: [G]oto [D]efinition' })
 		vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = event.buf, desc = 'LSP: [G]oto [R]eferences' })

@@ -81,7 +81,7 @@ vim.api.nvim_set_hl(0, "NonStandardCharHighlight", { underline = true, bold = tr
 local augroup = vim.api.nvim_create_augroup("NonStandardCharsGroup", { clear = true })
 local whitelist = "|─|─|│|│|╭|╮|╰|╯|├|┤|▌"
 
-local pattern = "[^\x20-\x7F|\t" .. whitelist .."]"
+local pattern = "[^\x20-\xFF|\t" .. whitelist .."]"
 
 vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
 	group = augroup,

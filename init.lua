@@ -76,25 +76,24 @@ vim.pack.add({
 	{ src = "https://github.com/Adrenocrom/sven.nvim" },
 })
 
-
-vim.api.nvim_set_hl(0, "NonStandardCharHighlight", { underline = true, bold = true, fg = "#ff0000" })
-local augroup = vim.api.nvim_create_augroup("NonStandardCharsGroup", { clear = true })
-local whitelist = "|─|─|│|│|╭|╮|╰|╯|├|┤|▌"
-
-local pattern = "[^\x20-\xFF|\t" .. whitelist .."]"
-
-vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
-	group = augroup,
-	pattern = "*",
-	callback = function()
-		pcall(function()
-			vim.fn.matchadd("NonStandardCharHighlight", pattern)
-		end)
-	end,
-})
-vim.api.nvim_create_user_command("RefreshMatch", function()
-    vim.fn.matchadd("NonStandardCharHighlight", pattern)
-end, {})
+--vim.api.nvim_set_hl(0, "NonStandardCharHighlight", { underline = true, bold = true, fg = "#ff0000" })
+--local augroup = vim.api.nvim_create_augroup("NonStandardCharsGroup", { clear = true })
+--local whitelist = "|─|─|│|│|╭|╮|╰|╯|├|┤|▌"
+--
+--local pattern = "[^\x20-\xFF|\t" .. whitelist .."]"
+--
+--vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
+--	group = augroup,
+--	pattern = "*",
+--	callback = function()
+--		pcall(function()
+--			vim.fn.matchadd("NonStandardCharHighlight", pattern)
+--		end)
+--	end,
+--})
+--vim.api.nvim_create_user_command("RefreshMatch", function()
+--    vim.fn.matchadd("NonStandardCharHighlight", pattern)
+--end, {})
 
 --- BEGINOFNEEDONPLUGIN ---
 vim.keymap.set('n', '<leader>sf', function()
